@@ -1,5 +1,4 @@
-from os import open
-import sys
+import sys, os
 
 class DS18B20:
 
@@ -16,15 +15,14 @@ class DS18B20:
         try:
             file = open(self.folder_structure)
         except OSError:
-            print('cannot open', (self.folder_structure))
-            return 'Error'
+            return 'File Error'
         else:
             filecontent = file.read()
             file.close()
 
 			# Error in Temperatursensor Daten
             if len(filecontent) != 75:
-                print('Error')
+                return 'Error'
             else:
                 stringvalue = filecontent.split("\n")[1].split(" ")[9]
                 return float(stringvalue[2:]) / 1000
