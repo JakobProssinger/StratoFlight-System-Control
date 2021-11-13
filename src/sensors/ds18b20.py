@@ -15,14 +15,14 @@ class DS18B20:
         try:
             file = open(self.folder_structure)
         except OSError:
-            return 'File Error'
+            return 'Sensor Missing'
         else:
             filecontent = file.read()
             file.close()
 
 			# Error in Temperatursensor Daten
             if len(filecontent) != 75:
-                return 'Error'
+                return 'File Error'
             else:
                 stringvalue = filecontent.split("\n")[1].split(" ")[9]
                 return float(stringvalue[2:]) / 1000
