@@ -13,7 +13,7 @@ class DS18B20:
 
     def getTemperature(self):
         try:
-            file = open(self.folder_structure)
+            file = open(self.folder_structure, 'r')
         except OSError:
             return 'Sensor Missing'
         else:
