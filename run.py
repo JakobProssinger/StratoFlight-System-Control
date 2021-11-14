@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 from src.sensors.ds18b20 import DS18B20
 from src.sensors.ina260 import INA260
-import time
+import time, src.sensors.internal
 
 TEMPSENSORS_DEVICE_ADDRESSES = ['28-00000cdfc36f', '28-00000cdf6b81']
 INA260_DEVICE_ADDRESSES = [0x40, 0x41]
@@ -35,7 +35,7 @@ def main():
         for device_address in TEMPSENSORS_DEVICE_ADDRESSES:
             ds18b20_sensors.append(DS18B20(device_address))
         #read ds18b20 Temperature Sensors
-        print(getTempSensorList(ds18b20_sensors))
+        print("Outer Temperature: ", getTempSensorList(ds18b20_sensors))
 
         #init ina260 Sensors
         ina260_sensors = []
@@ -44,9 +44,9 @@ def main():
             temp_ina260.reset_chip()
             ina260_sensors.append(temp_ina260)
         #read ina260 current sensors
-        print(get_Current_INA_List(ina260_sensors))
+        print("Bus Current: ", get_Current_INA_List(ina260_sensors))
         #read ina260 bus voltage sensors
-        print(get_Bus_Voltage_INA_List(ina260_sensors), "\n")
+        print("Bus Voltage: ", get_Bus_Voltage_INA_List(ina260_sensors), "\n")
         time.sleep(1)
 
 
