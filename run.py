@@ -37,6 +37,10 @@ def main():
         #read ds18b20 Temperature Sensors
         print("Outer Temperature: ", getTempSensorList(ds18b20_sensors))
 
+        #read raspberry internal Temperature
+        print("Internal Temperature: ",
+              src.sensors.internal.get_raspberry_temperature())
+
         #init ina260 Sensors
         ina260_sensors = []
         for device_address in INA260_DEVICE_ADDRESSES:
