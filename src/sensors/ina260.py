@@ -57,23 +57,16 @@ class INA260:
 
     def activate_average(self, samples):
         byte_list = [0x61, 0x27]
-        if samples == 1:
-            byte_list[0] = 0x061 + (0b000 << 1)
-        elif samples == 4:
-            byte_list[0] = 0x061 + (0b001 << 1)
-        elif samples == 16:
-            byte_list[0] = 0x061 + (0b010 << 1)
-        elif samples == 64:
-            byte_list[0] = 0x061 + (0b011 << 1)
-        elif samples == 128:
-            byte_list[0] = 0x061 + (0b100 << 1)
-        elif samples == 256:
-            byte_list[0] = 0x061 + (0b101 << 1)
-        elif samples == 512:
-            byte_list[0] = 0x061 + (0b110 << 1)
-        elif samples == 1024:
-            byte_list[0] = 0x061 + (0b111 << 1)
-        else:
-            byte_list[0] = 0x061
+        switch = {
+            1: 0x061 + (0b000 << 1),
+            4: 0x061 + (0b001 << 1),
+            16: 0x061 + (0b010 << 1),
+            64: 0x061 + (0b011 << 1),
+            128: 0x061 + (0b100 << 1),
+            256: 0x061 + (0b101 << 1),
+            512: 0x061 + (0b110 << 1),
+            1024: 0x061 + (0b111 << 1)
+        }
+        byte_list[0] = switch.get(samples, 0x61)
         self.i2c.write_i2c_block_data(self.dev_address,
                                       self._INA260_CONFIG_ADDR, byte_list)
