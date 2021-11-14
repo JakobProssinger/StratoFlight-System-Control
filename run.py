@@ -1,5 +1,4 @@
 #!/usr/bin/python3
-from os import name
 from src.sensors.ds18b20 import DS18B20
 from src.sensors.ina260 import INA260
 import time
