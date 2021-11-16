@@ -1,3 +1,4 @@
+from typing import Sized
 import smbus
 
 
@@ -22,17 +23,26 @@ class INA260:
             val = val - (1 << len)
         return val
 
+    def read_ina(self, register_address, register_size):
+        try:
+            return self.i2c.read_i2c_block_data(self.dev_address,
+                                                register_address,
+                                                register_size)
+        except OSError:
+            print("Sensor not found")
+        except Exception as e:
+            print("Error on Sensor")
+        return ["Error"] * register_size
+
     def get_bus_voltage(self):
-        raw_read = self.i2c.read_i2c_block_data(self.dev_address,
-                                                self._INA260_BUS_VOLTAGE_ADDR,
-                                                2)
+        raw_read = self.read_ina(self._INA260_BUS_VOLTAGE_ADDR, 2)
         word_rdata = raw_read[0] * 256 + raw_read[1]
-        vbus = float(word_rdata) / 1000.0 * self._INA260_BUS_VOLTAGE_LSB
+        vbus = round(
+            float(word_rdata) / 1000.0 * self._INA260_BUS_VOLTAGE_LSB, 3)
         return vbus
 
     def get_current(self):
-        raw_read = self.i2c.read_i2c_block_data(self.dev_address,
-                                                self._INA260_CURRENT_ADDR, 2)
+        raw_read = self.read_ina(self._INA260_CURRENT_ADDR, 2)
         word_rdata = raw_read[0] * 256 + raw_read[1]
         current_twos_compliment = word_rdata
         current_sign_bit = current_twos_compliment >> 15
@@ -52,8 +62,7 @@ class INA260:
                                       self._INA260_CONFIG_ADDR, byte_list)
 
     def read_configuration_register(self):
-        return self.i2c.read_i2c_block_data(self.dev_address,
-                                            self._INA260_CONFIG_ADDR, 2)
+        return self.read_ina(self._INA260_CONFIG_ADDR, 2)
 
     def activate_average(self, samples):
         byte_list = [0x61, 0x27]
