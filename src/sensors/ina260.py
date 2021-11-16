@@ -29,13 +29,26 @@ class INA260:
                                                 register_address,
                                                 register_size)
         except OSError:
-            print("Sensor not found")
+            print("Sensor not found. On I2C Address: ", hex(self.dev_address))
         except Exception as e:
-            print("Error on Sensor")
+            print("Exception on Sensor. On I2C Address: ",
+                  hex(self.dev_address))
         return ["Error"] * register_size
+
+    def write_ina(self, register_address, byte_list):
+        try:
+            self.i2c.write_i2c_block_data(self.dev_address, register_address,
+                                          byte_list)
+        except OSError:
+            print("Sensor not found. On I2C Address: ", hex(self.dev_address))
+        except Exception as e:
+            print("Exception on Sensor. On I2C Address: ",
+                  hex(self.dev_address))
 
     def get_bus_voltage(self):
         raw_read = self.read_ina(self._INA260_BUS_VOLTAGE_ADDR, 2)
+        if type(raw_read[0]) != int:
+            return "no Voltage"
         word_rdata = raw_read[0] * 256 + raw_read[1]
         vbus = round(
             float(word_rdata) / 1000.0 * self._INA260_BUS_VOLTAGE_LSB, 3)
@@ -43,6 +56,8 @@ class INA260:
 
     def get_current(self):
         raw_read = self.read_ina(self._INA260_CURRENT_ADDR, 2)
+        if type(raw_read[0]) != int:
+            return "Error"
         word_rdata = raw_read[0] * 256 + raw_read[1]
         current_twos_compliment = word_rdata
         current_sign_bit = current_twos_compliment >> 15
@@ -58,8 +73,7 @@ class INA260:
 
     def reset_chip(self):
         byte_list = [0x80, 0x00]
-        self.i2c.write_i2c_block_data(self.dev_address,
-                                      self._INA260_CONFIG_ADDR, byte_list)
+        self.write_ina(self._INA260_CONFIG_ADDR, byte_list)
 
     def read_configuration_register(self):
         return self.read_ina(self._INA260_CONFIG_ADDR, 2)
@@ -77,5 +91,4 @@ class INA260:
             1024: 0x061 + (0b111 << 1)
         }
         byte_list[0] = switch.get(samples, 0x61)
-        self.i2c.write_i2c_block_data(self.dev_address,
-                                      self._INA260_CONFIG_ADDR, byte_list)
+        self.write_ina(self.dev_address, self._INA260_CONFIG_ADDR, byte_list)
