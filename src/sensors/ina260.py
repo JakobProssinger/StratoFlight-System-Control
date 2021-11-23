@@ -63,9 +63,8 @@ class INA260:
         current_sign_bit = current_twos_compliment >> 15
         if (current_sign_bit == 1):
             current = float(
-                self.twos_compliment_to_int(
-                    current_twos_compliment,
-                    16)) / 1000.0 * self._INA260_CURRENT_LSB
+                self.twos_compliment_to_int(current_twos_compliment,
+                                            16)) * self._INA260_CURRENT_LSB
         else:
             current = float(
                 current_twos_compliment) / 1000.0 * self._INA260_CURRENT_LSB
@@ -91,4 +90,4 @@ class INA260:
             1024: 0x061 + (0b111 << 1)
         }
         byte_list[0] = switch.get(samples, 0x61)
-        self.write_ina(self.dev_address, self._INA260_CONFIG_ADDR, byte_list)
+        self.write_ina(self._INA260_CONFIG_ADDR, byte_list)
