@@ -16,9 +16,13 @@ class sensor_object:
     def __init__(self, ina260_device_list, ds18b20_device_list):
         self.ina_devices = []
         self.ds18b20_devices = []
-        self.ina_current = [0.0] * len(ina260_device_list)
-        self.ina_voltage = [0.0] * len(ina260_device_list)
-        self.raspberry_temperature = 0.0
+        ina_current = [0.0] * len(ina260_device_list)
+        ina_voltage = [0.0] * len(ina260_device_list)
+        ds18b20_temperature = [0.0] * len(ds18b20_device_list)
+        self.sensor_data = sensor_data_object(ina_current,
+                                              ina_voltage,
+                                              ds18b20_temperature,
+                                              raspberry_temperature=0.0)
 
         for sensor in ina260_device_list:
             temp_sensor = INA260(sensor)
@@ -28,26 +32,12 @@ class sensor_object:
         for sensor in ds18b20_device_list:
             temp_sensor = DS18B20(sensor)
             self.ds18b20_devices.append(temp_sensor)
-        self.ds18b20_temperature_list = [0.0] * len(ds18b20_device_list)
 
     def get_ina_current(self):
-        return self.ina_current
+        return self.sensor_data.ina_current_data
 
     def get_ina_voltage(self):
-        return self.ina_voltage
-
-    def reload_ina_data(self):
-        self.ina_current = self.get_Current_INA_List()
-        self.ina_voltage = self.get_Bus_Voltage_INA_List()
-
-    def reload_ds_temperature(self):
-        temperature_list = [0.0] * len(self.ds18b20_devices)
-        for i in range(0, len(self.ds18b20_devices), 1):
-            temperature_list[i] = self.ds18b20_devices[i].getTemperature()
-        self.ds18b20_temperature_list = temperature_list
-
-    def reload_raspberry_temperature(self):
-        self.raspberry_temperature = internal.get_raspberry_temperature()
+        return self.sensor_data.ina_voltage_data
 
     def get_Current_INA_List(self):
         current_list = [0.0] * len(self.ina_devices)
@@ -60,6 +50,20 @@ class sensor_object:
         for i in range(0, len(self.ina_devices), 1):
             voltage_list[i] = self.ina_devices[i].get_bus_voltage()
         return voltage_list
+
+    def reload_ina_data(self):
+        self.sensor_data.ina_current_data = self.get_Current_INA_List()
+        self.sensor_data.ina_voltage_data = self.get_Bus_Voltage_INA_List()
+
+    def reload_ds_temperature(self):
+        temperature_list = [0.0] * len(self.ds18b20_devices)
+        for i in range(0, len(self.ds18b20_devices), 1):
+            temperature_list[i] = self.ds18b20_devices[i].getTemperature()
+        self.sensor_data.ds18_temperature_data = temperature_list
+
+    def reload_raspberry_temperature(self):
+        self.sensor_data.raspberry_temperature = internal.get_raspberry_temperature(
+        )
 
     def reload_system_data(self):
         self.reload_ina_data()
