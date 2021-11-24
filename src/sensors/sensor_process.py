@@ -3,6 +3,15 @@ from src.sensors.ds18b20 import DS18B20
 import src.sensors.internal as internal
 
 
+class sensor_data_object:
+    def __init__(self, ina_current_list, ina_voltage_list,
+                 ds18b20_temperature_list, raspberry_temperature):
+        self.ina_current_data = ina_current_list
+        self.ina_voltage_data = ina_voltage_list
+        self.ds18_temperature_data = ds18b20_temperature_list
+        self.raspberry_temperature = raspberry_temperature
+
+
 class sensor_object:
     def __init__(self, ina260_device_list, ds18b20_device_list):
         self.ina_devices = []
@@ -10,16 +19,16 @@ class sensor_object:
         self.ina_current = [0.0] * len(ina260_device_list)
         self.ina_voltage = [0.0] * len(ina260_device_list)
         self.raspberry_temperature = 0.0
+
         for sensor in ina260_device_list:
             temp_sensor = INA260(sensor)
-            # temp_sensor.reset_chip()
             temp_sensor.activate_average(4)
             self.ina_devices.append(temp_sensor)
 
         for sensor in ds18b20_device_list:
             temp_sensor = DS18B20(sensor)
             self.ds18b20_devices.append(temp_sensor)
-        self.ds18b20_values = [0.0] * len(ds18b20_device_list)
+        self.ds18b20_temperature_list = [0.0] * len(ds18b20_device_list)
 
     def get_ina_current(self):
         return self.ina_current
@@ -35,7 +44,7 @@ class sensor_object:
         temperature_list = [0.0] * len(self.ds18b20_devices)
         for i in range(0, len(self.ds18b20_devices), 1):
             temperature_list[i] = self.ds18b20_devices[i].getTemperature()
-        self.ds18b20_values = temperature_list
+        self.ds18b20_temperature_list = temperature_list
 
     def reload_raspberry_temperature(self):
         self.raspberry_temperature = internal.get_raspberry_temperature()
