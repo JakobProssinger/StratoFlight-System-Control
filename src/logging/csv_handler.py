@@ -10,7 +10,7 @@ class CSV_HANDLER:
 
     def csv_write_header(self):
         try:
-            with open(self.directory, 'w+', newline='') as csvfile:
+            with open(self.directory, 'w', newline='') as csvfile:
                 writer = csv.writer(csvfile, delimiter=',')
                 writer.writerow(self.header_list)
                 self.csv_file_row += 1
@@ -31,6 +31,15 @@ class CSV_HANDLER:
         try:
             with open(self.directory, 'a', newline='') as csvfile:
                 csvfile.write(str(data_cell) + ',')
+                csvfile.close()
+        except Exception as e:
+            print(e)
+
+
+    def csv_write_newline(self):
+        try:
+            with open(self.directory, 'a', newline='') as csvfile:
+                csvfile.write('\r')
                 csvfile.close()
         except Exception as e:
             print(e)
