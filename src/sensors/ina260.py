@@ -50,14 +50,13 @@ class INA260:
         if type(raw_read[0]) != int:
             return "no Voltage"
         word_rdata = raw_read[0] * 256 + raw_read[1]
-        vbus = round(
-            float(word_rdata) / 1000.0 * self._INA260_BUS_VOLTAGE_LSB, 3)
+        vbus = round(float(word_rdata) * self._INA260_BUS_VOLTAGE_LSB, 3)
         return vbus
 
     def get_current(self):
         raw_read = self.read_ina(self._INA260_CURRENT_ADDR, 2)
         if type(raw_read[0]) != int:
-            return "Error"
+            return "no Current"
         word_rdata = raw_read[0] * 256 + raw_read[1]
         current_twos_compliment = word_rdata
         current_sign_bit = current_twos_compliment >> 15
@@ -66,8 +65,7 @@ class INA260:
                 self.twos_compliment_to_int(current_twos_compliment,
                                             16)) * self._INA260_CURRENT_LSB
         else:
-            current = float(
-                current_twos_compliment) / 1000.0 * self._INA260_CURRENT_LSB
+            current = float(current_twos_compliment) * self._INA260_CURRENT_LSB
         return current
 
     def reset_chip(self):
