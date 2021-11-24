@@ -3,7 +3,7 @@ from src.sensors.ds18b20 import DS18B20
 import src.sensors.internal as internal
 
 
-class sensor_data_object:
+class sensor_object:
     def __init__(self, ina260_device_list, ds18b20_device_list):
         self.ina_devices = []
         self.ds18b20_devices = []
