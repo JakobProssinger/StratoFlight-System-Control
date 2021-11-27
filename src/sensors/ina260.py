@@ -1,5 +1,15 @@
 from typing import Sized
 import smbus
+import logging
+
+# setup for logging
+module_logger = logging.getLogger("strato_logger.sensor_process")
+consoleHandler = logging.StreamHandler()
+consoleHandler.setLevel(logging.WARNING)
+formatter = logging.Formatter(
+    '%(asctime)s %(name)-12s: %(levelname)-8s: at %(funcName)s() %(message)s')
+consoleHandler.setFormatter(formatter)
+module_logger.addHandler(consoleHandler)
 
 
 #source: https://github.com/charkster/INA260/tree/077521eded5c8efe22bf843dfd2fa462e10bb9c5
@@ -14,9 +24,10 @@ class INA260:
 
     # Constructor
     def __init__(self,
-                 dev_address: int = _INA260_DEFAULT_DEVICE_ADDRESS) -> None:
+                 device_address: int = _INA260_DEFAULT_DEVICE_ADDRESS) -> None:
         self.i2c = smbus.SMBus(1)  #/dev/i2c-1
-        self.dev_address: int = dev_address
+        self.device_address: int = device_address
+        self.logger = logging.getLogger("strato_logger.sensor_process.ina260")
 
     def twos_compliment_to_int(self, val: int, len: int) -> int:
         # Convert twos compliment to integer
@@ -26,25 +37,30 @@ class INA260:
 
     def read_ina(self, register_address: int, register_size: int) -> float:
         try:
-            return self.i2c.read_i2c_block_data(self.dev_address,
+            return self.i2c.read_i2c_block_data(self.device_address,
                                                 register_address,
                                                 register_size)
         except OSError:
-            print("Sensor not found. On I2C Address: ", hex(self.dev_address))
+            self.logger.error("Could not read from INA260 with I2C-Address: " +
+                              str(hex(self.device_address)))
         except Exception as e:
-            print("Exception on Sensor. On I2C Address: ",
-                  hex(self.dev_address))
+            self.logger.error("Exception on INA260 with I2C-Address: " +
+                              str(hex(self.device_address)))
         return ["Error"] * register_size
 
-    def write_ina(self, register_address: int, byte_list: int) -> None:
+    def write_ina(self, register_address: int, byte_list: int) -> bool:
         try:
-            self.i2c.write_i2c_block_data(self.dev_address, register_address,
-                                          byte_list)
+            self.i2c.write_i2c_block_data(self.device_address,
+                                          register_address, byte_list)
         except OSError:
-            print("Sensor not found. On I2C Address: ", hex(self.dev_address))
+            self.logger.error("Could not write to INA260 with I2C-Address: " +
+                              str(hex(self.device_address)))
+            return False
         except Exception as e:
-            print("Exception on Sensor. On I2C Address: ",
-                  hex(self.dev_address))
+            self.logger.error("Exception on INA260 with I2C-Address: " +
+                              str(hex(self.device_address)))
+            return False
+        return True
 
     def get_bus_voltage(self) -> float:
         raw_read = self.read_ina(self._INA260_BUS_VOLTAGE_ADDR, 2)
@@ -70,7 +86,7 @@ class INA260:
         return current
 
     def reset_chip(self) -> None:
-        byte_list = [0x80, 0x00]
+        byte_list = [0x80, 0x00]  # reset code for INA260
         self.write_ina(self._INA260_CONFIG_ADDR, byte_list)
 
     def read_configuration_register(self) -> int:
@@ -89,4 +105,7 @@ class INA260:
             1024: 0x061 + (0b111 << 1)
         }
         byte_list[0] = switch.get(samples, 0x61)
-        self.write_ina(self._INA260_CONFIG_ADDR, byte_list)
+        if self.write_ina(self._INA260_CONFIG_ADDR, byte_list) is True:
+            self.logger.info("actiavted average, Samples : " + str(samples) +
+                             " on INA260 with I2C-Address: " +
+                             str(hex(self.device_address)))

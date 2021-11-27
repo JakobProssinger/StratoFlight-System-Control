@@ -1,6 +1,9 @@
 from src.sensors.ina260 import INA260
 from src.sensors.ds18b20 import DS18B20
 import src.sensors.internal as internal
+import logging
+
+module_logger = logging.getLogger("strato_logger.sensor_process")
 
 
 class sensor_data_object:
@@ -69,6 +72,5 @@ class sensor_object:
 
     def reload_system_data(self) -> None:
         self.reload_ina_data()
-
         self.reload_ds_temperature()
         self.reload_raspberry_temperature()
