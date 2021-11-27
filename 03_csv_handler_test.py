@@ -1,4 +1,3 @@
-import csv
 from src.logging.csv_handler import CSV_HANDLER
 from src.sensors.sensor_process import sensor_data_object, sensor_object
 import time, datetime
