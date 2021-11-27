@@ -13,17 +13,18 @@ class INA260:
     _INA260_CURRENT_LSB = 1.25  #mA
 
     # Constructor
-    def __init__(self, dev_address=_INA260_DEFAULT_DEVICE_ADDRESS):
+    def __init__(self,
+                 dev_address: int = _INA260_DEFAULT_DEVICE_ADDRESS) -> None:
         self.i2c = smbus.SMBus(1)  #/dev/i2c-1
-        self.dev_address = dev_address
+        self.dev_address: int = dev_address
 
-    def twos_compliment_to_int(self, val, len):
+    def twos_compliment_to_int(self, val: int, len: int) -> int:
         # Convert twos compliment to integer
         if (val & (1 << len - 1)):
             val = val - (1 << len)
         return val
 
-    def read_ina(self, register_address, register_size):
+    def read_ina(self, register_address: int, register_size: int) -> float:
         try:
             return self.i2c.read_i2c_block_data(self.dev_address,
                                                 register_address,
@@ -35,7 +36,7 @@ class INA260:
                   hex(self.dev_address))
         return ["Error"] * register_size
 
-    def write_ina(self, register_address, byte_list):
+    def write_ina(self, register_address: int, byte_list: int) -> None:
         try:
             self.i2c.write_i2c_block_data(self.dev_address, register_address,
                                           byte_list)
@@ -45,7 +46,7 @@ class INA260:
             print("Exception on Sensor. On I2C Address: ",
                   hex(self.dev_address))
 
-    def get_bus_voltage(self):
+    def get_bus_voltage(self) -> float:
         raw_read = self.read_ina(self._INA260_BUS_VOLTAGE_ADDR, 2)
         if type(raw_read[0]) != int:
             return "no Voltage"
@@ -53,7 +54,7 @@ class INA260:
         vbus = round(float(word_rdata) * self._INA260_BUS_VOLTAGE_LSB, 3)
         return vbus
 
-    def get_current(self):
+    def get_current(self) -> float:
         raw_read = self.read_ina(self._INA260_CURRENT_ADDR, 2)
         if type(raw_read[0]) != int:
             return "no Current"
@@ -68,14 +69,14 @@ class INA260:
             current = float(current_twos_compliment) * self._INA260_CURRENT_LSB
         return current
 
-    def reset_chip(self):
+    def reset_chip(self) -> None:
         byte_list = [0x80, 0x00]
         self.write_ina(self._INA260_CONFIG_ADDR, byte_list)
 
-    def read_configuration_register(self):
+    def read_configuration_register(self) -> int:
         return self.read_ina(self._INA260_CONFIG_ADDR, 2)
 
-    def activate_average(self, samples):
+    def activate_average(self, samples: int) -> None:
         byte_list = [0x61, 0x27]
         switch = {
             1: 0x061 + (0b000 << 1),

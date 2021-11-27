@@ -3,43 +3,39 @@ from os import write
 
 class CSV_HANDLER:
 
-    def __init__(self, csv_handler_directory, header_list):
+    def __init__(self, csv_handler_directory: str, header_list: list) -> None:
         self.directory = csv_handler_directory
         self.header_list = header_list
         self.csv_file_row = 1                            #csv row to write in next
 
-    def csv_write_header(self):
+    def csv_write_header(self) -> None:
         try:
-            with open(self.directory, 'w', newline='') as csvfile:
+            with open(self.directory, 'w', newline = '') as csvfile:
                 writer = csv.writer(csvfile, delimiter=',')
                 writer.writerow(self.header_list)
                 self.csv_file_row += 1
-                csvfile.close()
         except Exception as e:
             print(e)
 
-    def csv_write_data_row(self, data_list):
+    def csv_write_data_row(self, data_list: list) -> None:
         try:
-            with open(self.directory, 'a', newline='') as csvfile:
+            with open(self.directory, 'a', newline = '') as csvfile:
                 writer = csv.writer(csvfile, delimiter=',')
                 writer.writerow(data_list)
-                csvfile.close()
         except Exception as e:
             print(e)
     
-    def csv_write_data_cell(self, data_cell):
+    def csv_write_data_cell(self, data_cell: float) -> None:
         try:
             with open(self.directory, 'a', newline='') as csvfile:
                 csvfile.write(str(data_cell) + ',')
-                csvfile.close()
         except Exception as e:
             print(e)
 
 
-    def csv_write_newline(self):
+    def csv_write_newline(self) -> None:
         try:
-            with open(self.directory, 'a', newline='') as csvfile:
+            with open(self.directory, 'a', newline = '') as csvfile:
                 csvfile.write('\r')
-                csvfile.close()
         except Exception as e:
             print(e)

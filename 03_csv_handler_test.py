@@ -33,6 +33,7 @@ if __name__ == "__main__":
         for values in sensors_processor.sensor_data.ds18_temperature_data:
             csv_handler.csv_write_data_cell(values)
 
+        #write onboard raspberry pi temperature to csv
         sensors_processor.reload_raspberry_temperature()
         csv_handler.csv_write_data_cell(
             sensors_processor.sensor_data.raspberry_temperature)
