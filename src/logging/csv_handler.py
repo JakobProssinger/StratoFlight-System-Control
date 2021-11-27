@@ -6,14 +6,12 @@ class CSV_HANDLER:
     def __init__(self, csv_handler_directory: str, header_list: list) -> None:
         self.directory = csv_handler_directory
         self.header_list = header_list
-        self.csv_file_row = 1                            #csv row to write in next
 
     def csv_write_header(self) -> None:
         try:
             with open(self.directory, 'w', newline = '') as csvfile:
                 writer = csv.writer(csvfile, delimiter=',')
                 writer.writerow(self.header_list)
-                self.csv_file_row += 1
         except Exception as e:
             print(e)
 
