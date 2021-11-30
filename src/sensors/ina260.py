@@ -3,13 +3,7 @@ import smbus
 import logging
 
 # setup for logging
-module_logger = logging.getLogger("strato_logger.sensor_process")
-consoleHandler = logging.StreamHandler()
-consoleHandler.setLevel(logging.WARNING)
-formatter = logging.Formatter(
-    '%(asctime)s %(name)-12s: %(levelname)-8s: at %(funcName)s() %(message)s')
-consoleHandler.setFormatter(formatter)
-module_logger.addHandler(consoleHandler)
+ina_module_logger = logging.getLogger("strato_logger.sensor_process.ina260")
 
 
 #source: https://github.com/charkster/INA260/tree/077521eded5c8efe22bf843dfd2fa462e10bb9c5
@@ -27,7 +21,8 @@ class INA260:
                  device_address: int = _INA260_DEFAULT_DEVICE_ADDRESS) -> None:
         self.i2c = smbus.SMBus(1)  #/dev/i2c-1
         self.device_address: int = device_address
-        self.logger = logging.getLogger("strato_logger.sensor_process.ina260")
+        self.logger = logging.getLogger(
+            "strato_logger.sensor_process.ina260.Ina260")
 
     def twos_compliment_to_int(self, val: int, len: int) -> int:
         # Convert twos compliment to integer
@@ -65,7 +60,7 @@ class INA260:
     def get_bus_voltage(self) -> float:
         raw_read = self.read_ina(self._INA260_BUS_VOLTAGE_ADDR, 2)
         if type(raw_read[0]) != int:
-            return "no Voltage"
+            return "noVoltage"
         word_rdata = raw_read[0] * 256 + raw_read[1]
         vbus = round(float(word_rdata) * self._INA260_BUS_VOLTAGE_LSB, 3)
         return vbus
@@ -73,7 +68,7 @@ class INA260:
     def get_current(self) -> float:
         raw_read = self.read_ina(self._INA260_CURRENT_ADDR, 2)
         if type(raw_read[0]) != int:
-            return "no Current"
+            return "noCurrent"
         word_rdata = raw_read[0] * 256 + raw_read[1]
         current_twos_compliment = word_rdata
         current_sign_bit = current_twos_compliment >> 15

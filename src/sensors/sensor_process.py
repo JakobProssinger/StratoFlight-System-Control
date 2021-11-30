@@ -3,7 +3,15 @@ from src.sensors.ds18b20 import DS18B20
 import src.sensors.internal as internal
 import logging
 
-module_logger = logging.getLogger("strato_logger.sensor_process")
+logger = logging.getLogger("strato_logger.sensor_process")
+logger.setLevel(logging.WARNING)
+consoleHandler = logging.StreamHandler()
+consoleHandler.setLevel(logging.WARNING)
+formatter = logging.Formatter(
+    '%(asctime)s - %(name)-12s - %(levelname)s:\n\tat %(funcName)s() - %(message)s'
+)
+consoleHandler.setFormatter(formatter)
+logger.addHandler(consoleHandler)
 
 
 class sensor_data_object:
