@@ -1,5 +1,6 @@
 from src.sensors.ina260 import INA260
 from src.sensors.ds18b20 import DS18B20
+from src.logging.csv_handler import CSVHandler
 import src.sensors.internal as internal
 import logging
 
@@ -14,7 +15,7 @@ consoleHandler.setFormatter(formatter)
 logger.addHandler(consoleHandler)
 
 
-class sensor_data_object:
+class SensorDataObject:
     def __init__(self, ina_current_list: list, ina_voltage_list: list,
                  ds18b20_temperature_list: list,
                  raspberry_temperature: float) -> None:
@@ -24,7 +25,7 @@ class sensor_data_object:
         self.raspberry_temperature = raspberry_temperature
 
 
-class sensor_object:
+class SensorObject:
     def __init__(self, ina260_device_list: list,
                  ds18b20_device_list: list) -> None:
         self.ina_devices = []
@@ -32,10 +33,10 @@ class sensor_object:
         ina_current = [0.0] * len(ina260_device_list)
         ina_voltage = [0.0] * len(ina260_device_list)
         ds18b20_temperature = [0.0] * len(ds18b20_device_list)
-        self.sensor_data = sensor_data_object(ina_current,
-                                              ina_voltage,
-                                              ds18b20_temperature,
-                                              raspberry_temperature=0.0)
+        self.sensor_data = SensorDataObject(ina_current,
+                                            ina_voltage,
+                                            ds18b20_temperature,
+                                            raspberry_temperature=0.0)
 
         for sensor in ina260_device_list:
             temp_sensor = INA260(sensor)

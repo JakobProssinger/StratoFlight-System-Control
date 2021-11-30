@@ -2,7 +2,7 @@ import csv
 from os import write
 
 
-class CSV_HANDLER:
+class CSVHandler:
     def __init__(self, csv_handler_directory: str, header_list: list) -> None:
         self.directory = csv_handler_directory
         self.header_list = header_list

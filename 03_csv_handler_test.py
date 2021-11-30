@@ -1,5 +1,5 @@
-from src.logging.csv_handler import CSV_HANDLER
-from src.sensors.sensor_process import sensor_data_object, sensor_object
+from src.logging.csv_handler import CSVHandler
+from src.sensors.sensor_process import SensorObject
 import time, datetime
 
 CSV_DIRECTORY = './Logging-Files/sensor_data.csv'
@@ -11,9 +11,9 @@ HEADER_LIST = [
 ]
 
 if __name__ == "__main__":
-    sensors_processor = sensor_object(INA260_DEVICE_ADDRESSES,
-                                      TEMPSENSORS_DEVICE_ADDRESSES)
-    csv_handler = CSV_HANDLER(CSV_DIRECTORY, HEADER_LIST)
+    sensors_processor = SensorObject(INA260_DEVICE_ADDRESSES,
+                                     TEMPSENSORS_DEVICE_ADDRESSES)
+    csv_handler = CSVHandler(CSV_DIRECTORY, HEADER_LIST)
     csv_handler.csv_write_data_row(HEADER_LIST)
     while 1:
         csv_handler.csv_write_data_cell(datetime.datetime.now())
