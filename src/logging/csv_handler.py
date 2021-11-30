@@ -9,7 +9,8 @@ class CSV_HANDLER:
 
     def csv_write_header(self) -> None:
         try:
-            with open(self.directory, 'w', newline='') as csvfile:
+            with open(self.directory, 'w', newline='',
+                      delimiter=';') as csvfile:
                 writer = csv.writer(csvfile, delimiter=';')
                 writer.writerow(self.header_list)
         except Exception as e:
