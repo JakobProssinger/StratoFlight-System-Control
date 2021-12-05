@@ -14,10 +14,11 @@ HEADER_LIST = [
 
 
 def main() -> None:
-    sensors_processor = SensorObject(INA260_DEVICE_ADDRESSES,
-                                     TEMPSENSORS_DEVICE_ADDRESSES)
     csv_handler = CSVHandler(CSV_DIRECTORY, HEADER_LIST)
     csv_handler.csv_write_data_row(HEADER_LIST)
+    sensors_processor = SensorObject(INA260_DEVICE_ADDRESSES,
+                                     TEMPSENSORS_DEVICE_ADDRESSES, csv_handler)
+
     while 1:
         csv_handler.csv_write_data_cell(datetime.datetime.now())
         sensors_processor.reload_ina_data()
