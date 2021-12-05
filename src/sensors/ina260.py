@@ -22,7 +22,8 @@ class INA260:
         self.i2c = smbus.SMBus(1)  #/dev/i2c-1
         self.device_address: int = device_address
         self.logger = logging.getLogger(
-            "strato_logger.sensor_process.ina260.Ina260")
+            "strato_logger.sensor_process.ina260.INA260")
+        self.logger.info("created ina260 object")
 
     def twos_compliment_to_int(self, val: int, len: int) -> int:
         # Convert twos compliment to integer
