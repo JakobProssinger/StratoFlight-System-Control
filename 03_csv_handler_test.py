@@ -1,6 +1,7 @@
 from src.logging.csv_handler import CSVHandler
 from src.sensors.sensor_process import SensorObject
-import time, datetime
+import time
+import datetime
 
 CSV_DIRECTORY = './Logging-Files/sensor_data.csv'
 TEMPSENSORS_DEVICE_ADDRESSES = ['28-00000cdfc36f']  #, '28-00000cdf6b81']

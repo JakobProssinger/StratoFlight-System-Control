@@ -1,7 +1,9 @@
 #!/usr/bin/python3
 from src.sensors.ds18b20 import DS18B20
 from src.sensors.ina260 import INA260
-import time, src.sensors.internal
+import src.sensors.internal
+import time
+
 
 TEMPSENSORS_DEVICE_ADDRESSES = ['28-00000cdfc36f', '28-00000cdf6b81']
 INA260_DEVICE_ADDRESSES = [0x40, 0x41]
