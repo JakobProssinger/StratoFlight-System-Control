@@ -3,16 +3,21 @@ from src.sensors.ds18b20 import DS18B20
 from src.logging.csv_handler import CSVHandler
 import src.sensors.internal as internal
 import logging
+import datetime
 
 logger = logging.getLogger("strato_logger.sensor_process")
-logger.setLevel(logging.WARNING)
-consoleHandler = logging.StreamHandler()
-consoleHandler.setLevel(logging.WARNING)
+logger.setLevel(logging.DEBUG)
 formatter = logging.Formatter(
     '%(asctime)s - %(name)-12s - %(levelname)s:\n\tat %(funcName)s() - %(message)s'
 )
-consoleHandler.setFormatter(formatter)
-logger.addHandler(consoleHandler)
+console_Handler = logging.StreamHandler()
+console_Handler.setLevel(logging.INFO)
+console_Handler.setFormatter(formatter)
+file_Hanlder = logging.FileHandler('./Logging-Files/sensor_data.csv')
+file_Hanlder.setLevel(logging.ERROR)
+file_Hanlder.setFormatter(formatter)
+logger.addHandler(console_Handler)
+logger.addHandler(file_Hanlder)
 
 
 class SensorDataObject:
@@ -26,8 +31,8 @@ class SensorDataObject:
 
 
 class SensorObject:
-    def __init__(self, ina260_device_list: list,
-                 ds18b20_device_list: list) -> None:
+    def __init__(self, ina260_device_list: list, ds18b20_device_list: list,
+                 csv_handler: CSVHandler) -> None:
         self.ina_devices = []
         self.ds18b20_devices = []
         ina_current = [0.0] * len(ina260_device_list)
@@ -37,6 +42,8 @@ class SensorObject:
                                             ina_voltage,
                                             ds18b20_temperature,
                                             raspberry_temperature=0.0)
+        self.csv_handler = csv_handler
+        self.logger = logging.getLogger("strato_logger.sensor_process")
 
         for sensor in ina260_device_list:
             temp_sensor = INA260(sensor)
@@ -46,6 +53,8 @@ class SensorObject:
         for sensor in ds18b20_device_list:
             temp_sensor = DS18B20(sensor)
             self.ds18b20_devices.append(temp_sensor)
+
+        self.logger.info("created sensor_process object")
 
     def get_ina_current(self) -> float:
         return self.sensor_data.ina_current_data
@@ -83,3 +92,27 @@ class SensorObject:
         self.reload_ina_data()
         self.reload_ds_temperature()
         self.reload_raspberry_temperature()
+
+    def system_process(self) -> None:
+        self.csv_handler.csv_write_data_cell(datetime.datetime.now())
+        self.reload_ina_data()
+
+        #write INA current to CSV
+        for values in self.sensor_data.ina_current_data:
+            self.csv_handler.csv_write_data_cell(values)
+
+        #write INA voltage to CSV
+        for values in self.sensor_data.ina_voltage_data:
+            self.csv_handler.csv_write_data_cell(values)
+
+        #write ds18b20 temperature to CSV
+        self.reload_ds_temperature()
+        for values in self.sensor_data.ds18_temperature_data:
+            self.csv_handler.csv_write_data_cell(values)
+
+        #write onebaord raspberry pi temperature to csv
+        self.reload_raspberry_temperature()
+        self.csv_handler.csv_write_data_cell(
+            self.sensor_data.raspberry_temperature)
+
+        self.csv_handler.csv_write_newline()
