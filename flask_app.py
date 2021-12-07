@@ -68,8 +68,15 @@ def change_system_main_thread(aMode):
 
 @app.route("/sensors")
 def show_values():
+    sensors_processor.system_process()
+    template_data = {
+        'ina260_voltages': sensors_processor.sensor_data.ina_voltage_data,
+        'ina260_currents': sensors_processor.sensor_data.ina_current_data,
+        'raspbi_temp': sensors_processor.sensor_data.raspberry_temperature,
+        'ds18b20_temp': sensors_processor.sensor_data.ds18_temperature_data
+    }
     raspberry_temp = internal.get_raspberry_temperature()
-    return render_template('template.html', raspberry_temp=raspberry_temp)
+    return render_template('template.html', **template_data)
 
 
 if __name__ == '__main__':
