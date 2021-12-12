@@ -4,7 +4,8 @@
 @Author:        Prossinger Jakob
 @Date:          12 December 2021
 @Todo:          * implementation of LED Thread
-                * auto reload server data if measuring thread is finished 
+                * auto reload server data if measuring thread is finished
+                * at exit function to cleanup gpio pins
 """
 from flask import Flask, stream_with_context, request, Response, redirect, url_for
 from flask import render_template
@@ -47,12 +48,29 @@ file_Hanlder.setFormatter(formatter)
 logger.addHandler(console_Handler)
 logger.addHandler(file_Hanlder)
 
-################ Falsk App Setup #############################
+################ flask app setup #############################
 app = Flask(__name__)
 app.run_main_system = False
-app.LED_activated = True
+app.LED_blink_state = True
+
+default_LED_states = {
+    11: {
+        "name": "Red_LED_PIN",
+        "state": GPIO.HIGH
+    },
+    13: {
+        "name": "Green_LED_PIN",
+        "state": GPIO.LOW
+    }
+}
+app.LED_states = default_LED_states
+GPIO.setmode(GPIO.BOARD)
+for pin in app.LED_states:
+    GPIO.setup(pin, GPIO.OUT)
+    GPIO.output(pin, GPIO.LOW)
 
 
+################ flask app functions #############################
 def system_main_thread() -> None:
     if app.run_main_system is False:
         return
@@ -62,11 +80,12 @@ def system_main_thread() -> None:
 
 
 def led_blink_thread() -> None:
-    if app.LED_activated is False:
-        GPIO.cleanup()
+    if app.LED_blink_state is False:
         return
-    else:
-        pass
+    for pin in app.LED_states:
+        pin.state = not pin.state
+        GPIO.output(pin, pin.state)
+    threading.Timer(1, led_blink_thread).start()
 
 
 def stream_template(template_name, **context):
@@ -77,6 +96,7 @@ def stream_template(template_name, **context):
     return rv
 
 
+################ flask app routes #############################
 @app.route('/stream')
 def stream_view():
     raspberry_temp = internal.get_raspberry_temperature()
