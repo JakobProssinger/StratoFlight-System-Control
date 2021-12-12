@@ -6,18 +6,6 @@ import logging
 import datetime
 
 logger = logging.getLogger("strato_logger.sensor_process")
-logger.setLevel(logging.DEBUG)
-formatter = logging.Formatter(
-    '%(asctime)s - %(name)-12s - %(levelname)s:\n\tat %(funcName)s() - %(message)s'
-)
-console_Handler = logging.StreamHandler()
-console_Handler.setLevel(logging.INFO)
-console_Handler.setFormatter(formatter)
-file_Hanlder = logging.FileHandler('./Logging-Files/sensor_data.csv')
-file_Hanlder.setLevel(logging.ERROR)
-file_Hanlder.setFormatter(formatter)
-logger.addHandler(console_Handler)
-logger.addHandler(file_Hanlder)
 
 
 class SensorDataObject:

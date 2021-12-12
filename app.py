@@ -7,6 +7,8 @@ from src.logging.csv_handler import CSVHandler
 from src.sensors.sensor_process import SensorObject
 import time
 import threading
+import logging
+import RPi.GPIO as GPIO
 
 CSV_DIRECTORY = './Logging-Files/sensor_data.csv'
 TEMPSENSORS_DEVICE_ADDRESSES = ['28-00000cdfc36f']  #, '28-00000cdf6b81']
@@ -21,17 +23,39 @@ csv_handler.csv_write_data_row(HEADER_LIST)
 sensors_processor = SensorObject(INA260_DEVICE_ADDRESSES,
                                  TEMPSENSORS_DEVICE_ADDRESSES, csv_handler)
 
+logger = logging.getLogger("strato_logger")
+logger.setLevel(logging.DEBUG)
+formatter = logging.Formatter(
+    '%(asctime)s - %(name)-12s - %(levelname)s:\n\tat %(funcName)s() - %(message)s'
+)
+console_Handler = logging.StreamHandler()
+console_Handler.setLevel(logging.INFO)
+console_Handler.setFormatter(formatter)
+file_Hanlder = logging.FileHandler('./Logging-Files/sensor_data.csv')
+file_Hanlder.setLevel(logging.ERROR)
+file_Hanlder.setFormatter(formatter)
+logger.addHandler(console_Handler)
+logger.addHandler(file_Hanlder)
+
 app = Flask(__name__)
 app.run_main_system = False
+app.LED_activated = True
 
 
 def system_main_thread() -> None:
-    print("in thread")
     if app.run_main_system is False:
         return
     sensors_processor.system_process()
-    print("cycle ended")
+    logger.info("started system main thread")
     threading.Timer(5, system_main_thread).start()
+
+
+def led_blink_thread() -> None:
+    if app.LED_activated is False:
+        GPIO.cleanup()
+        return
+    else:
+        pass
 
 
 def stream_template(template_name, **context):
