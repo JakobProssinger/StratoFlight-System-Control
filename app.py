@@ -3,8 +3,7 @@
 @Descrption:    starts flask server for Strato Flight 2021
 @Author:        Prossinger Jakob
 @Date:          12 December 2021
-@Todo:          * implementation of LED Thread
-                * auto reload server data if measuring thread is finished
+@Todo:          * auto reload server data if measuring thread is finished
                 * at exit function to cleanup gpio pins
 """
 from flask import Flask, stream_with_context, request, Response, redirect, url_for
@@ -51,23 +50,24 @@ logger.addHandler(file_Hanlder)
 ################ flask app setup #############################
 app = Flask(__name__)
 app.run_main_system = False
-app.LED_blink_state = True
+app.LED_blink_state = False
 
 default_LED_states = {
     11: {
-        "name": "Red_LED_PIN",
-        "state": GPIO.HIGH
+        'name': "Red_LED_PIN",
+        'state': GPIO.HIGH
     },
     13: {
-        "name": "Green_LED_PIN",
-        "state": GPIO.LOW
+        'name': "Green_LED_PIN",
+        'state': GPIO.LOW
     }
 }
+
 app.LED_states = default_LED_states
 GPIO.setmode(GPIO.BOARD)
 for pin in app.LED_states:
     GPIO.setup(pin, GPIO.OUT)
-    GPIO.output(pin, GPIO.LOW)
+    GPIO.output(pin, app.LED_states[pin]['state'])
 
 
 ################ flask app functions #############################
@@ -83,8 +83,9 @@ def led_blink_thread() -> None:
     if app.LED_blink_state is False:
         return
     for pin in app.LED_states:
-        pin.state = not pin.state
-        GPIO.output(pin, pin.state)
+        app.LED_states[pin]['state'] = not app.LED_states[pin]['state']
+        GPIO.output(pin, app.LED_states[pin]['state'])
+    logger.info("started led blink thread")
     threading.Timer(1, led_blink_thread).start()
 
 
@@ -106,7 +107,10 @@ def stream_view():
 
 @app.route("/")
 def main():
-    template_data = {'main_process': app.run_main_system}
+    template_data = {
+        'main_process': app.run_main_system,
+        'led_blink_mode': app.LED_blink_state
+    }
     return render_template('index.html', **template_data)
 
 
@@ -117,6 +121,17 @@ def change_system_main_thread(aMode):
         system_main_thread()
     elif aMode == "off":
         app.run_main_system = False
+
+    return redirect("/")
+
+
+@app.route("/changeBlinkMode/<aMode>")
+def change_Blink_Mode(aMode):
+    if aMode == "on":
+        app.LED_blink_state = True
+        led_blink_thread()
+    elif aMode == "off":
+        app.LED_blink_state = False
 
     return redirect("/")
 

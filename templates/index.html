@@ -30,6 +30,26 @@
     </div>
     {% endif %}
 
+    {% if led_blink_mode == true %}
+    <h2>LED Blink Mode is currently <strong>on</strong></h2>
+    <div>
+        <div>
+            <a href="/changeBlinkMode/off">
+                <input type="button" value="Turn off" />
+            </a>
+        </div>
+    </div>
+    {% else %}
+    <h2>LED Blink Mode is currently <strong>off</strong></h2>
+    <div>
+        <div>
+            <a href="/changeBlinkMode/on">
+                <input type="button" value="Turn on" />
+            </a>
+        </div>
+    </div>
+    {% endif %}
+
 
 </body>
 
