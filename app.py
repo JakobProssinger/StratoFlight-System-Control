@@ -1,8 +1,10 @@
 """
-@Author:    Prossinger Jakob
-@Date:      12 December 2021
-@Todo:      * implementation of LED Thread
-            * auto reload server data if measuring thread is finished 
+@File:          app.py
+@Descrption:    starts flask server for Strato Flight 2021
+@Author:        Prossinger Jakob
+@Date:          12 December 2021
+@Todo:          * implementation of LED Thread
+                * auto reload server data if measuring thread is finished 
 """
 from flask import Flask, stream_with_context, request, Response, redirect, url_for
 from flask import render_template

@@ -1,3 +1,10 @@
+"""
+@File:          sensor_processor.py
+@Descrption:    module for handling multible sensor measurings 
+@Author:        Prossinger Jakob
+@Date:          12 December 2021
+@Todo:          * csv Error logging
+"""
 from src.sensors.ina260 import INA260
 from src.sensors.ds18b20 import DS18B20
 from src.logging.csv_handler import CSVHandler
