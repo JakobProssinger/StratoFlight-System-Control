@@ -1,3 +1,9 @@
+"""
+@Author:    Prossinger Jakob
+@Date:      12 December 2021
+@Todo:      * implementation of LED Thread
+            * auto reload server data if measuring thread is finished 
+"""
 from flask import Flask, stream_with_context, request, Response, redirect, url_for
 from flask import render_template
 from src.sensors import ds18b20
@@ -10,6 +16,7 @@ import threading
 import logging
 import RPi.GPIO as GPIO
 
+################## CSV Hanlder Setup #########################
 CSV_DIRECTORY = './Logging-Files/sensor_data.csv'
 TEMPSENSORS_DEVICE_ADDRESSES = ['28-00000cdfc36f']  #, '28-00000cdf6b81']
 INA260_DEVICE_ADDRESSES = [0x40, 0x41]
@@ -23,6 +30,7 @@ csv_handler.csv_write_data_row(HEADER_LIST)
 sensors_processor = SensorObject(INA260_DEVICE_ADDRESSES,
                                  TEMPSENSORS_DEVICE_ADDRESSES, csv_handler)
 
+################## Logger Setup ##############################
 logger = logging.getLogger("strato_logger")
 logger.setLevel(logging.DEBUG)
 formatter = logging.Formatter(
@@ -37,6 +45,7 @@ file_Hanlder.setFormatter(formatter)
 logger.addHandler(console_Handler)
 logger.addHandler(file_Hanlder)
 
+################ Falsk App Setup #############################
 app = Flask(__name__)
 app.run_main_system = False
 app.LED_activated = True
