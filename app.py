@@ -41,7 +41,7 @@ formatter = logging.Formatter(
 console_Handler = logging.StreamHandler()
 console_Handler.setLevel(logging.INFO)
 console_Handler.setFormatter(formatter)
-file_Hanlder = logging.FileHandler('./Logging-Files/sensor_data.csv')
+file_Hanlder = logging.FileHandler('./Logging-Files/logging_error.csv')
 file_Hanlder.setLevel(logging.ERROR)
 file_Hanlder.setFormatter(formatter)
 logger.addHandler(console_Handler)
