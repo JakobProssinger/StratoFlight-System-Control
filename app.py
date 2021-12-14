@@ -5,6 +5,8 @@
 @Date:          12 December 2021
 @Todo:          * auto reload server data if measuring thread is finished
                 * at exit function to cleanup gpio pins
+                * setup function: logging, sensor data, csv file existing
+                * LOGGING LEVEL: SYSTEM
 """
 from flask import Flask, stream_with_context, request, Response, redirect, url_for
 from flask import render_template
@@ -17,9 +19,10 @@ import time
 import threading
 import logging
 import RPi.GPIO as GPIO
+import atexit
 
 ################## CSV Hanlder Setup #########################
-CSV_DIRECTORY = './Logging-Files/sensor_data.csv'
+CSV_DIRECTORY = '/home/pi/Documents/StratoFlight-System-Control/Logging-Files/sensor_data.csv'
 TEMPSENSORS_DEVICE_ADDRESSES = ['28-00000cdfc36f']  #, '28-00000cdf6b81']
 INA260_DEVICE_ADDRESSES = [0x40, 0x41]
 HEADER_LIST = [
@@ -41,7 +44,9 @@ formatter = logging.Formatter(
 console_Handler = logging.StreamHandler()
 console_Handler.setLevel(logging.INFO)
 console_Handler.setFormatter(formatter)
-file_Hanlder = logging.FileHandler('./Logging-Files/logging_error.csv')
+file_Hanlder = logging.FileHandler(
+    '/home/pi/Documents/StratoFlight-System-Control/Logging-Files/logging_error.csv'
+)
 file_Hanlder.setLevel(logging.ERROR)
 file_Hanlder.setFormatter(formatter)
 logger.addHandler(console_Handler)
@@ -68,6 +73,11 @@ GPIO.setmode(GPIO.BOARD)
 for pin in app.LED_states:
     GPIO.setup(pin, GPIO.OUT)
     GPIO.output(pin, app.LED_states[pin]['state'])
+
+
+@atexit.register
+def atexit_function() -> None:
+    GPIO.cleanup()
 
 
 ################ flask app functions #############################
