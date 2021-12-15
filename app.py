@@ -1,12 +1,12 @@
 """
 @File:          app.py
-@Descrption:    starts flask server for Strato Flight 2021
+@Descrption:    starts flask server for Strato Flight 2021/2021
 @Author:        Prossinger Jakob
-@Date:          12 December 2021
+@Date:          14 December 2021
 @Todo:          * auto reload server data if measuring thread is finished
-                * at exit function to cleanup gpio pins
                 * setup function: logging, sensor data, csv file existing
                 * LOGGING LEVEL: SYSTEM
+                * comments Parameters and functions
 """
 from flask import Flask, stream_with_context, request, Response, redirect, url_for
 from flask import render_template
@@ -20,9 +20,54 @@ import threading
 import logging
 import RPi.GPIO as GPIO
 import atexit
+"""
+    Script to start the flask server and handle all sensor in
+    the Project: StratoFlight 2021/2022. 
 
+    Attributes
+    ----------
+    CSV_DATA_DIRECTORY : str
+        PATH to the csv file to store all sensor data.
+
+    TEMPSENSORS_DEVICE_ADDRESSES : list (int)
+        List of addresses of the DS18b20 sensor for temperature measurement.
+
+    INA260_DEVICE_ADDRESSES : list (int)
+        List of addresses of the INA260 sensor for electrical current and
+        voltage measurement.
+
+    HEADER_LIST : list (string)
+        List of csv file headeres for the csv file data file.
+
+    csv_handler :  CSVHandler
+        csv handler, stores the data in the csv data file.
+
+    sensors_processor : SensorObject
+        object to handle all sensor measurements and storing them
+        inside varibale.
+    
+    logger : logger
+        StratoFlight main/parent logger to handle all loggings inside
+        this project
+
+    formatter : logging.Formatter
+        formatter for the logging system
+
+    console_Handler : logging.StreamHandler
+
+
+    file_Hanlder
+    
+
+
+    Methods
+    -------
+    csv_write_header(self)
+        write the header column to the csv file
+    
+"""
 ################## CSV Hanlder Setup #########################
-CSV_DIRECTORY = '/home/pi/Documents/StratoFlight-System-Control/Logging-Files/sensor_data.csv'
+CSV_DATA_DIRECTORY = '/home/pi/Documents/StratoFlight-System-Control/Logging-Files/sensor_data.csv'
 TEMPSENSORS_DEVICE_ADDRESSES = ['28-00000cdfc36f']  #, '28-00000cdf6b81']
 INA260_DEVICE_ADDRESSES = [0x40, 0x41]
 HEADER_LIST = [
@@ -30,7 +75,7 @@ HEADER_LIST = [
     'INA VOLTAGE 2/mV', 'ds18b28 Temperature', 'raspberry temperature'
 ]
 
-csv_handler = CSVHandler(CSV_DIRECTORY, HEADER_LIST)
+csv_handler = CSVHandler(CSV_DATA_DIRECTORY, HEADER_LIST)
 csv_handler.csv_write_data_row(HEADER_LIST)
 sensors_processor = SensorObject(INA260_DEVICE_ADDRESSES,
                                  TEMPSENSORS_DEVICE_ADDRESSES, csv_handler)
@@ -155,7 +200,6 @@ def show_values():
         'raspbi_temp': sensors_processor.sensor_data.raspberry_temperature,
         'ds18b20_temp': sensors_processor.sensor_data.ds18_temperature_data
     }
-    raspberry_temp = internal.get_raspberry_temperature()
     return render_template('template.html', **template_data)
 
 
