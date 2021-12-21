@@ -7,15 +7,14 @@
                 * setup function: logging, sensor data, csv file existing
                 * LOGGING LEVEL: SYSTEM
                 * comments Parameters and functions
+                * KONSTANTEN in externes File z.B. LED Pins
+                * error if /Logging-Files does not exist
 """
 from flask import Flask, stream_with_context, request, Response, redirect, url_for
 from flask import render_template
-from src.sensors import ds18b20
-from src.sensors import ina260
 from src.sensors import internal
 from src.logging.csv_handler import CSVHandler
 from src.sensors.sensor_process import SensorObject
-import time
 import threading
 import logging
 import RPi.GPIO as GPIO
