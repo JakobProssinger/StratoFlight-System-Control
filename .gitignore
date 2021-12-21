@@ -1,7 +1,8 @@
 #Strato-Flight
 tests/
 todo.txt
-Logging-Files/
+Logging-Files/logging_error.csv
+Logging-Files/sensor_data.csv
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

@@ -1,13 +1,12 @@
 """
 @File:          app.py
-@Descrption:    starts flask server for Strato Flight 2021/2021
+@Descrption:    starts flask server for Strato Flight 2021/2022
 @Author:        Prossinger Jakob
-@Date:          14 December 2021
+@Date:          21 December 2021
 @Todo:          * auto reload server data if measuring thread is finished
                 * setup function: logging, sensor data, csv file existing
                 * LOGGING LEVEL: SYSTEM
                 * comments Parameters and functions
-                * KONSTANTEN in externes File z.B. LED Pins
                 * error if /Logging-Files does not exist
 """
 from flask import Flask, stream_with_context, request, Response, redirect, url_for
@@ -19,6 +18,7 @@ import threading
 import logging
 import RPi.GPIO as GPIO
 import atexit
+import constants as const
 """
     Script to start the flask server and handle all sensor in
     the Project: StratoFlight 2021/2022. 
@@ -58,7 +58,6 @@ import atexit
     file_Hanlder
     
 
-
     Methods
     -------
     csv_write_header(self)
@@ -67,12 +66,9 @@ import atexit
 """
 ################## CSV Hanlder Setup #########################
 CSV_DATA_DIRECTORY = '/home/pi/Documents/StratoFlight-System-Control/Logging-Files/sensor_data.csv'
-TEMPSENSORS_DEVICE_ADDRESSES = ['28-00000cdfc36f']  #, '28-00000cdf6b81']
-INA260_DEVICE_ADDRESSES = [0x40, 0x41]
-HEADER_LIST = [
-    'TIME', 'INA CURRENT 1/mA', 'INA CURRENT 2/mA', 'INA VOLTAGE 1/mV',
-    'INA VOLTAGE 2/mV', 'ds18b28 Temperature', 'raspberry temperature'
-]
+TEMPSENSORS_DEVICE_ADDRESSES = const._DS18b20_ADDRESSES
+INA260_DEVICE_ADDRESSES = const._INA260_DEVICE_ADDRESSES
+HEADER_LIST = const._CSV_HEADER_LIST
 
 csv_handler = CSVHandler(CSV_DATA_DIRECTORY, HEADER_LIST)
 csv_handler.csv_write_data_row(HEADER_LIST)
@@ -102,11 +98,11 @@ app.run_main_system = False
 app.LED_blink_state = False
 
 default_LED_states = {
-    11: {
+    const._LEDPIN1: {
         'name': "Red_LED_PIN",
         'state': GPIO.HIGH
     },
-    13: {
+    const._LEDPIN2: {
         'name': "Green_LED_PIN",
         'state': GPIO.LOW
     }
