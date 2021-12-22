@@ -13,5 +13,6 @@ _DS18b20_ADDRESSES = ['28-00000cdfc36f']
 _INA260_DEVICE_ADDRESSES = [0x40, 0x41]
 _CSV_HEADER_LIST = [
     'TIME', 'INA CURRENT 1/mA', 'INA CURRENT 2/mA', 'INA VOLTAGE 1/mV',
-    'INA VOLTAGE 2/mV', 'ds18b28 Temperature', 'raspberry temperature'
+    'INA VOLTAGE 2/mV', 'ds18b28 Temperature', 'raspberry temperature',
+    'min_Voltage1', 'min_Voltage2', 'max_Voltage1', 'max_Voltage2'
 ]
