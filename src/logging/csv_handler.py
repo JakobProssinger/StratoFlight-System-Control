@@ -10,6 +10,9 @@
 """
 import csv
 from os import write
+import logging
+
+csv_module_logger = logging.getLogger("strato_logger.sensor_process.ds18b20")
 
 
 class CSVHandler:
@@ -67,7 +70,7 @@ class CSVHandler:
                 writer = csv.writer(csvfile, delimiter=';')
                 writer.writerow(self.header_list)
         except Exception as e:
-            print(e)
+            csv_module_logger.error(e)
 
     def csv_write_data_row(self, data_list: list) -> None:
         """
@@ -88,7 +91,7 @@ class CSVHandler:
                 writer = csv.writer(csvfile, delimiter=';')
                 writer.writerow(data_list)
         except Exception as e:
-            print(e)
+            csv_module_logger.error(e)
 
     def csv_write_data_cell(self, data_cell: float) -> None:
         """
@@ -108,7 +111,7 @@ class CSVHandler:
             with open(self.directory, 'a', newline='') as csvfile:
                 csvfile.write(str(data_cell) + ';')
         except Exception as e:
-            print(e)
+            csv_module_logger.error(e)
 
     def csv_write_newline(self) -> None:
         """
@@ -123,4 +126,4 @@ class CSVHandler:
             with open(self.directory, 'a', newline='') as csvfile:
                 csvfile.write('\r')
         except Exception as e:
-            print(e)
+            csv_module_logger.error(e)
