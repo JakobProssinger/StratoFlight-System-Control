@@ -4,6 +4,7 @@
 @Author:        Prossinger Jakob
 @Date:          12 December 2021
 @Todo:          * csv Error logging
+                * remove minimal Values of Voltage
 """
 from src.sensors.ina260 import INA260
 from src.sensors.ds18b20 import DS18B20
@@ -38,6 +39,8 @@ class SensorObject:
                                             ds18b20_temperature,
                                             raspberry_temperature=0.0)
         self.csv_handler = csv_handler
+        self.min_INA_voltages = [1000000.0, 1000000.0]  #mV
+        self.max_INA_voltages = [-1000000.0, -1000000.0]
         self.logger = logging.getLogger("strato_logger.sensor_process")
 
         for sensor in ina260_device_list:
@@ -109,5 +112,15 @@ class SensorObject:
         self.reload_raspberry_temperature()
         self.csv_handler.csv_write_data_cell(
             self.sensor_data.raspberry_temperature)
+
+        # print min an max voltage values
+
+        for i in range(0, len(self.sensor_data.ina_voltage_data)):
+            if self.min_INA_voltages[i] > self.sensor_data.ina_voltage_data[i]:
+                self.min_INA_voltages[i] = self.sensor_data.ina_voltage_data[i]
+            self.csv_handler.csv_write_data_cell(self.min_INA_voltages[i])
+            if self.max_INA_voltages[i] < self.sensor_data.ina_voltage_data[i]:
+                self.max_INA_voltages[i] = self.sensor_data.ina_voltage_data[i]
+            self.csv_handler.csv_write_data_cell(self.max_INA_voltages[i])
 
         self.csv_handler.csv_write_newline()
