@@ -82,7 +82,7 @@ class DS18B20:
             with open(self.directory, 'r') as file:
                 filecontent = file.read()
         except OSError:
-            self.logger.error("couldn't read ds18b20 sensor")
+            self.logger.info("couldn't read ds18b20 sensor")
             return 'Sensor Missing'
 
         # Error in Temperatursensor Daten
