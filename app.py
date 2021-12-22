@@ -8,6 +8,8 @@
                 * LOGGING LEVEL: SYSTEM
                 * comments Parameters and functions
                 * error if /Logging-Files does not exist
+                * remove ds18b20
+                * only write header if fiel is empty
 """
 from flask import Flask, stream_with_context, request, Response, redirect, url_for
 from flask import render_template
@@ -94,8 +96,8 @@ logger.addHandler(file_Hanlder)
 
 ################ flask app setup #############################
 app = Flask(__name__)
-app.run_main_system = False
-app.LED_blink_state = False
+app.run_main_system = True
+app.LED_blink_state = True
 
 default_LED_states = {
     const._LEDPIN1: {
@@ -127,6 +129,11 @@ def system_main_thread() -> None:
     sensors_processor.system_process()
     logger.info("started system main thread")
     threading.Timer(5, system_main_thread).start()
+
+
+# Auto start meassuring thread
+if app.run_main_system == True:
+    system_main_thread()
 
 
 def led_blink_thread() -> None:
