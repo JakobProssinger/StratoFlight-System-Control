@@ -9,7 +9,7 @@
                 * test if csv does not exist
 """
 import csv
-from os import write
+import os
 import logging
 
 csv_module_logger = logging.getLogger("strato_logger.sensor_process.ds18b20")
@@ -64,6 +64,10 @@ class CSVHandler:
         Exception
             if csv couldnt be opened or be writen
         """
+        if os.stat(self.directory).st_size != 0:
+            print("file empty")
+            return
+
         try:
             with open(self.directory, 'w', newline='',
                       delimiter=';') as csvfile:
