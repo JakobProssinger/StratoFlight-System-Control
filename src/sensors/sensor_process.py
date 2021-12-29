@@ -7,7 +7,6 @@
                 * remove minimal Values of Voltage
 """
 from src.sensors.ina260 import INA260
-from src.sensors.ds18b20 import DS18B20
 from src.logging.csv_handler import CSVHandler
 import src.sensors.internal as internal
 import logging
@@ -18,25 +17,20 @@ logger = logging.getLogger("strato_logger.sensor_process")
 
 class SensorDataObject:
     def __init__(self, ina_current_list: list, ina_voltage_list: list,
-                 ds18b20_temperature_list: list,
                  raspberry_temperature: float) -> None:
         self.ina_current_data = ina_current_list
         self.ina_voltage_data = ina_voltage_list
-        self.ds18_temperature_data = ds18b20_temperature_list
         self.raspberry_temperature = raspberry_temperature
 
 
 class SensorObject:
-    def __init__(self, ina260_device_list: list, ds18b20_device_list: list,
+    def __init__(self, ina260_device_list: list,
                  csv_handler: CSVHandler) -> None:
         self.ina_devices = []
-        self.ds18b20_devices = []
         ina_current = [0.0] * len(ina260_device_list)
         ina_voltage = [0.0] * len(ina260_device_list)
-        ds18b20_temperature = [0.0] * len(ds18b20_device_list)
         self.sensor_data = SensorDataObject(ina_current,
                                             ina_voltage,
-                                            ds18b20_temperature,
                                             raspberry_temperature=0.0)
         self.csv_handler = csv_handler
         self.min_INA_voltages = [1000000.0, 1000000.0]  #mV
@@ -47,10 +41,6 @@ class SensorObject:
             temp_sensor = INA260(sensor)
             temp_sensor.activate_average(4)
             self.ina_devices.append(temp_sensor)
-
-        for sensor in ds18b20_device_list:
-            temp_sensor = DS18B20(sensor)
-            self.ds18b20_devices.append(temp_sensor)
 
         self.logger.info("created sensor_process object")
 
@@ -76,19 +66,12 @@ class SensorObject:
         self.sensor_data.ina_current_data = self.get_Current_INA_List()
         self.sensor_data.ina_voltage_data = self.get_Bus_Voltage_INA_List()
 
-    def reload_ds_temperature(self) -> None:
-        temperature_list = [0.0] * len(self.ds18b20_devices)
-        for i in range(0, len(self.ds18b20_devices), 1):
-            temperature_list[i] = self.ds18b20_devices[i].getTemperature()
-        self.sensor_data.ds18_temperature_data = temperature_list
-
     def reload_raspberry_temperature(self) -> None:
         self.sensor_data.raspberry_temperature = internal.get_raspberry_temperature(
         )
 
     def reload_system_data(self) -> None:
         self.reload_ina_data()
-        self.reload_ds_temperature()
         self.reload_raspberry_temperature()
 
     def system_process(self) -> None:
@@ -103,11 +86,6 @@ class SensorObject:
         for values in self.sensor_data.ina_voltage_data:
             self.csv_handler.csv_write_data_cell(values)
 
-        #write ds18b20 temperature to CSV
-        self.reload_ds_temperature()
-        for values in self.sensor_data.ds18_temperature_data:
-            self.csv_handler.csv_write_data_cell(values)
-
         #write onebaord raspberry pi temperature to csv
         self.reload_raspberry_temperature()
         self.csv_handler.csv_write_data_cell(
@@ -117,12 +95,14 @@ class SensorObject:
 
         for i in range(0, len(self.sensor_data.ina_voltage_data)):
             if type(self.sensor_data.ina_voltage_data[i]) == str:
+                self.csv_handler.csv_write_data_cell(self.min_INA_voltages[i])
+                self.csv_handler.csv_write_data_cell(self.max_INA_voltages[i])
                 continue
             if self.min_INA_voltages[i] > self.sensor_data.ina_voltage_data[i]:
                 self.min_INA_voltages[i] = self.sensor_data.ina_voltage_data[i]
             self.csv_handler.csv_write_data_cell(self.min_INA_voltages[i])
             if self.max_INA_voltages[i] < self.sensor_data.ina_voltage_data[i]:
                 self.max_INA_voltages[i] = self.sensor_data.ina_voltage_data[i]
-                self.csv_handler.csv_write_data_cell(self.max_INA_voltages[i])
+            self.csv_handler.csv_write_data_cell(self.max_INA_voltages[i])
 
         self.csv_handler.csv_write_newline()

@@ -4,10 +4,6 @@
     <h2>Raspberry Temperature</h2>
     <li>{{raspbi_temp}} °C</li>
 
-    <h2>DS18b20 Temperature</h2>
-    {%for temperature in ds18b20_temp %}
-    <li>{{temperature}}°C</li>
-    {%endfor%}
     <h2>INA Sensors</h2>
     <h3>Voltage:</h3>
     {% for voltage in ina260_voltages%}

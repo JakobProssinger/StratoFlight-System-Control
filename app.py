@@ -68,14 +68,12 @@ import constants as const
 """
 ################## CSV Hanlder Setup #########################
 CSV_DATA_DIRECTORY = '/home/pi/Documents/StratoFlight-System-Control/Logging-Files/sensor_data.csv'
-TEMPSENSORS_DEVICE_ADDRESSES = const._DS18b20_ADDRESSES
 INA260_DEVICE_ADDRESSES = const._INA260_DEVICE_ADDRESSES
 HEADER_LIST = const._CSV_HEADER_LIST
 
 csv_handler = CSVHandler(CSV_DATA_DIRECTORY, HEADER_LIST)
 csv_handler.csv_write_data_row(HEADER_LIST)
-sensors_processor = SensorObject(INA260_DEVICE_ADDRESSES,
-                                 TEMPSENSORS_DEVICE_ADDRESSES, csv_handler)
+sensors_processor = SensorObject(INA260_DEVICE_ADDRESSES, csv_handler)
 
 ################## Logger Setup ##############################
 logger = logging.getLogger("strato_logger")
@@ -200,7 +198,6 @@ def show_values():
         'ina260_voltages': sensors_processor.sensor_data.ina_voltage_data,
         'ina260_currents': sensors_processor.sensor_data.ina_current_data,
         'raspbi_temp': sensors_processor.sensor_data.raspberry_temperature,
-        'ds18b20_temp': sensors_processor.sensor_data.ds18_temperature_data
     }
     return render_template('template.html', **template_data)
 
