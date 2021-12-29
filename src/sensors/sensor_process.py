@@ -116,11 +116,13 @@ class SensorObject:
         # print min an max voltage values
 
         for i in range(0, len(self.sensor_data.ina_voltage_data)):
+            if type(self.sensor_data.ina_voltage_data[i]) == str:
+                continue
             if self.min_INA_voltages[i] > self.sensor_data.ina_voltage_data[i]:
                 self.min_INA_voltages[i] = self.sensor_data.ina_voltage_data[i]
             self.csv_handler.csv_write_data_cell(self.min_INA_voltages[i])
             if self.max_INA_voltages[i] < self.sensor_data.ina_voltage_data[i]:
                 self.max_INA_voltages[i] = self.sensor_data.ina_voltage_data[i]
-            self.csv_handler.csv_write_data_cell(self.max_INA_voltages[i])
+                self.csv_handler.csv_write_data_cell(self.max_INA_voltages[i])
 
         self.csv_handler.csv_write_newline()
