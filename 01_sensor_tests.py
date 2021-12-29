@@ -61,7 +61,9 @@ def main():
         voltage_List = get_Bus_Voltage_INA_List(ina260_sensors)
 
         print("Bus Voltage: ", voltage_List)
-        if min_Voltage > voltage_List[1]:
+        if type(voltage_List[1]) == str:
+            continue
+        elif min_Voltage > voltage_List[1]:
             min_Voltage = voltage_List[1]
         print("Min Voltage: " + str(min_Voltage) + "\n")
         time.sleep(0.5)
