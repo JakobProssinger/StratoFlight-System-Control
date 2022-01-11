@@ -11,6 +11,33 @@ git clone https://github.com/JakobProssinger/StratoFlight-System-Control.git
 ```
 ### Activate I2C, SPI, RX-TX, 1-Wire
 See guide in at https://pinout.xyz/
+
+### Activate UART
+See guide at: https://sparklers-the-makers.github.io/blog/robotics/use-neo-6m-module-with-raspberry-pi/
+```
+sudo nano /boot/config.txt
+```
+Append following files:
+```
+dtparam=spi=on
+dtoverlay=pi3-disable-bt
+core_freq=250
+enable_uart=1
+force_turbo=1
+```
+In 
+```
+sudo nano /boot/cmdline.txt
+```
+replace with:
+```
+dwc_otg.lpm_enable=0 console=tty1 root=/dev/mmcblk0p2 rootfstype=ext4 elevator=deadline fsck.repair=yes rootwait quiet splash plymouth.ignore-serial-consoles
+```
+Test function:
+```
+sudo cat /dev/ttyAMA0
+```
+
 ### Setup Flask
 
 ```
