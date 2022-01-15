@@ -1,0 +1,32 @@
+2022-01-15 16:06:14,346 - strato_logger.sensor_process.ina260.INA260 - ERROR:
+	at read_ina() - Could not read from INA260 with I2C-Address: 0x40
+2022-01-15 16:06:14,347 - strato_logger.sensor_process.ina260.INA260 - ERROR:
+	at read_ina() - Could not read from INA260 with I2C-Address: 0x40
+2022-01-15 16:06:14,820 - strato_logger.sensor_process.ina260.INA260 - ERROR:
+	at read_ina() - Could not read from INA260 with I2C-Address: 0x40
+2022-01-15 16:06:14,821 - strato_logger.sensor_process.ina260.INA260 - ERROR:
+	at read_ina() - Could not read from INA260 with I2C-Address: 0x40
+2022-01-15 16:06:19,371 - strato_logger.sensor_process.ina260.INA260 - ERROR:
+	at read_ina() - Could not read from INA260 with I2C-Address: 0x40
+2022-01-15 16:06:19,374 - strato_logger.sensor_process.ina260.INA260 - ERROR:
+	at read_ina() - Could not read from INA260 with I2C-Address: 0x40
+2022-01-15 16:06:19,836 - strato_logger.sensor_process.ina260.INA260 - ERROR:
+	at read_ina() - Could not read from INA260 with I2C-Address: 0x40
+2022-01-15 16:06:19,841 - strato_logger.sensor_process.ina260.INA260 - ERROR:
+	at read_ina() - Could not read from INA260 with I2C-Address: 0x40
+2022-01-15 16:06:24,404 - strato_logger.sensor_process.ina260.INA260 - ERROR:
+	at read_ina() - Could not read from INA260 with I2C-Address: 0x40
+2022-01-15 16:06:24,406 - strato_logger.sensor_process.ina260.INA260 - ERROR:
+	at read_ina() - Could not read from INA260 with I2C-Address: 0x40
+2022-01-15 16:06:24,875 - strato_logger.sensor_process.ina260.INA260 - ERROR:
+	at read_ina() - Could not read from INA260 with I2C-Address: 0x40
+2022-01-15 16:06:24,884 - strato_logger.sensor_process.ina260.INA260 - ERROR:
+	at read_ina() - Could not read from INA260 with I2C-Address: 0x40
+2022-01-15 16:06:29,434 - strato_logger.sensor_process.ina260.INA260 - ERROR:
+	at read_ina() - Could not read from INA260 with I2C-Address: 0x40
+2022-01-15 16:06:29,436 - strato_logger.sensor_process.ina260.INA260 - ERROR:
+	at read_ina() - Could not read from INA260 with I2C-Address: 0x40
+2022-01-15 16:06:29,915 - strato_logger.sensor_process.ina260.INA260 - ERROR:
+	at read_ina() - Could not read from INA260 with I2C-Address: 0x40
+2022-01-15 16:06:29,917 - strato_logger.sensor_process.ina260.INA260 - ERROR:
+	at read_ina() - Could not read from INA260 with I2C-Address: 0x40
