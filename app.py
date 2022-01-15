@@ -95,8 +95,8 @@ logger.addHandler(file_Hanlder)
 ################ flask app setup #############################
 app = Flask(__name__)
 
-app.led_blink_state = _AUTOSTART_LED_BLINK
-app.run_main_system = _AUTOSTART_MEASURING
+app.led_blink_state = const._AUTOSTART_LED_BLINK
+app.run_main_system = const._AUTOSTART_MEASURING
 
 default_LED_states = {
 
