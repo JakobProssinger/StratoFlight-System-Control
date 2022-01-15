@@ -5,11 +5,11 @@
 @Date:          21 December 2021
 @Todo:          * auto reload server data if measuring thread is finished
                 * setup function: logging, sensor data, csv file existing
-                * LOGGING LEVEL: SYSTEM
                 * comments Parameters and functions
                 * error if /Logging-Files does not exist
-                * remove ds18b20
-                * only write header if fiel is empty
+                * only write header if file is empty
+                * shutdown under 2,7V
+                * Polymorph all Sensors
 """
 from flask import Flask, stream_with_context, request, Response, redirect, url_for
 from flask import render_template
@@ -94,10 +94,12 @@ logger.addHandler(file_Hanlder)
 
 ################ flask app setup #############################
 app = Flask(__name__)
-app.run_main_system = True
-app.LED_blink_state = True
+
+app.led_blink_state = _AUTOSTART_LED_BLINK
+app.run_main_system = _AUTOSTART_MEASURING
 
 default_LED_states = {
+
     const._LEDPIN1: {
         'name': "Red_LED_PIN",
         'state': GPIO.HIGH
@@ -135,7 +137,7 @@ if app.run_main_system == True:
 
 
 def led_blink_thread() -> None:
-    if app.LED_blink_state is False:
+    if app.led_blink_state is False:
         return
     for pin in app.LED_states:
         app.LED_states[pin]['state'] = not app.LED_states[pin]['state']
@@ -143,6 +145,8 @@ def led_blink_thread() -> None:
     logger.info("started led blink thread")
     threading.Timer(1, led_blink_thread).start()
 
+if app.led_blink_state == True:
+    led_blink_thread()
 
 def stream_template(template_name, **context):
     app.update_template_context(context)
@@ -164,7 +168,7 @@ def stream_view():
 def main():
     template_data = {
         'main_process': app.run_main_system,
-        'led_blink_mode': app.LED_blink_state
+        'led_blink_mode': app.led_blink_state
     }
     return render_template('index.html', **template_data)
 
@@ -183,10 +187,10 @@ def change_system_main_thread(aMode):
 @app.route("/changeBlinkMode/<aMode>")
 def change_Blink_Mode(aMode):
     if aMode == "on":
-        app.LED_blink_state = True
+        app.led_blink_state = True
         led_blink_thread()
     elif aMode == "off":
-        app.LED_blink_state = False
+        app.led_blink_state = False
 
     return redirect("/")
 

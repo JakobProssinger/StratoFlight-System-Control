@@ -1,15 +1,22 @@
 """
 @File:          constants.py
 @Descrption:    Constants for the StratoFlight 2021/22 Project
-                includes Sensor addresses, file-paths and konst. strings
+                includes Sensor addresses, file-paths and const. strings
 @Author:        Prossinger Jakob
 @Date:          21 December 2021
 @Todo:          * 
 """
+
+#PIN Layout
 _LEDPIN1 = 11
 _LEDPIN2 = 13
 _ONEWIRE_PIN = 7  # GPIO 4
-#_DS18b20_ADDRESSES = ['28-00000cdfc36f']
+
+#Configure
+_AUTOSTART_LED_BLINK = True
+_AUTOSTART_MEASURING = True
+
+#Sensors
 _INA260_DEVICE_ADDRESSES = [0x40, 0x41]
 _CSV_HEADER_LIST = [
     'TIME', 'INA CURRENT 1/mA', 'INA CURRENT 2/mA', 'INA VOLTAGE 1/mV',
