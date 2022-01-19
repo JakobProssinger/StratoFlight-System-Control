@@ -2,7 +2,7 @@
 @File:          app.py
 @Descrption:    starts flask server for Strato Flight 2021/2022
 @Author:        Prossinger Jakob
-@Date:          21 December 2021
+@Date:          19 January 2021
 @Todo:          * auto reload server data if measuring thread is finished
                 * setup function: logging, sensor data, csv file existing
                 * comments Parameters and functions
@@ -130,6 +130,7 @@ def system_main_thread() -> None:
     logger.info("started system main thread")
     threading.Timer(5, system_main_thread).start()
 
+
 def led_blink_thread() -> None:
     if app.led_blink_state is False:
         return
@@ -139,15 +140,10 @@ def led_blink_thread() -> None:
     logger.info("started led blink thread")
     threading.Timer(1, led_blink_thread).start()
 
+
+# start led blink if 'flask run' is used
 if app.led_blink_state == True:
     led_blink_thread()
-
-def stream_template(template_name, **context):
-    app.update_template_context(context)
-    t = app.jinja_env.get_template(template_name)
-    rv = t.stream(context)
-    rv.disable_buffering()
-    return rv
 
 
 ################ flask app routes #############################
