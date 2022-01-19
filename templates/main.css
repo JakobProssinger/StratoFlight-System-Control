@@ -1,10 +1,6 @@
 body {
     font-family: Arial, Lucida Console;
-    background-image: url(background.png);
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: 120%;
-    background-color:rgba(67, 136, 67, 0.342);
+    background-color:rgb(131, 171, 204);
     display: inline-block;
 }
 
@@ -17,7 +13,7 @@ h2 {
 }
 
 button {
-    background-color: #4CAF50;
+    background-color: rgb(255, 166, 0);
     border-radius: 10px;
     border: none;
     color: white;
