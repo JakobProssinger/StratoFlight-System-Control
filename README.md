@@ -59,7 +59,7 @@ sudo python3 app.py
 | 02    | RED          | 5V DC-Power   | Power for INA260                  |
 | 03    | BROWN        | SDA1 (I2C)    | SDA for I2C network               |
 | 05    | BLUE         | SCL1 (I2C)    | SCL for I2C network               |
-| 10    | YELLOW       | RX (UART)     | reading from GPS Neo-6M
+| 10    | YELLOW       | RX (UART)     | reading from GPS Neo-6M           |
 | 11    | GREEN        | GPIO          | case LED green                    |
 | 13    | WHITE        | GPIO          | case LED red                      |
 | 39    | BLACK        | Ground        | GND                               |
@@ -75,7 +75,8 @@ sudo python3 app.py
 | smbus                                                                   | I2C handling                                                |
 | os                                                                      | opening local files                                         |
 | csv                                                                     | handling formatting of csv files                            | 
-| pynmea                                                                  | compling the GPS Neo-6M data                                |
+| pynmea2                                                                 | compling the GPS Neo-6M data                                |
+| serial                                                                  | reading GPS Neo-6M                                          |
 
 ***
 
