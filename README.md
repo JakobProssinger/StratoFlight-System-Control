@@ -12,7 +12,7 @@ git clone https://github.com/JakobProssinger/StratoFlight-System-Control.git
 ### Activate I2C, SPI, RX-TX, 1-Wire
 See guide in at https://pinout.xyz/
 
-### Activate UART
+### Activate UART for NEO-6M
 See guide at: https://sparklers-the-makers.github.io/blog/robotics/use-neo-6m-module-with-raspberry-pi/
 ```
 sudo nano /boot/config.txt
@@ -39,18 +39,19 @@ sudo cat /dev/ttyAMA0
 ```
 
 ### Setup Flask
-
+Start falsk server in /Documents/StratoFlight-System-Control
 ```
-export FLASK_APP=app
+sudo python3 app.py
 ```
 
 ## StratoFlight-System-Control
 
 ### Test-System
-| Name                          | Usage                                                |
-| ---                           | ---                                                  |
-| Raspberry Pi Model 4         | Power source, reading Sensors with I2C, SPI, 1-Wire  | 
-| AdaFruit INA260               | Voltage and Current Measurement                      |
+| Name                          | Usage                                                 |
+| ---                           | ---                                                   |
+| Raspberry Pi Model 4         | Power source, reading Sensors with I2C, SPI, 1-Wire    | 
+| AdaFruit INA260               | Voltage and Current Measurement                       |
+| NEO6M                         | GPS sensor with UART Interface                        |
 
 #### Raspberry Pi Used Pinout
 | Pin # | Cable Colour | Name          | Usage                             |
@@ -58,27 +59,30 @@ export FLASK_APP=app
 | 02    | RED          | 5V DC-Power   | Power for INA260                  |
 | 03    | BROWN        | SDA1 (I2C)    | SDA for I2C network               |
 | 05    | BLUE         | SCL1 (I2C)    | SCL for I2C network               |
+| 10    | YELLOW       | RX (UART)     | reading from GPS Neo-6M
 | 11    | GREEN        | GPIO          | case LED green                    |
 | 13    | WHITE        | GPIO          | case LED red                      |
 | 39    | BLACK        | Ground        | GND                               |
 
 #### Python-Packages
-| Name                                                                    | Usage                                      |
-| ---                                                                     | ---                                        |
-| flask                                                                   | Hosting the webserver for system-Control and user access   |
-| threading                                                               | threading starting and stopping threads    |
-| logging                                                                 | logging error messages and debug inforamtion|
-| RPi.GPIO                                                                | Controling GPIO Pins and case LEDs |
-| atexit                                                                  | handling of crashes or programm shutdowns |
-| smbus                                                                   | I2C handling|
-| os                                                                      | opening local files |
-| csv                                                                     | handling formatting of csv files | 
+| Name                                                                    | Usage                                                       |
+| ---                                                                     | ---                                                         |
+| flask                                                                   | Hosting the webserver for system-Control and user access    |
+| threading                                                               | threading starting and stopping threads                     |
+| logging                                                                 | logging error messages and debug inforamtion                |
+| RPi.GPIO                                                                | Controling GPIO Pins and case LEDs                          |
+| atexit                                                                  | handling of crashes or programm shutdowns                   |
+| smbus                                                                   | I2C handling                                                |
+| os                                                                      | opening local files                                         |
+| csv                                                                     | handling formatting of csv files                            | 
+| pynmea                                                                  | compling the GPS Neo-6M data                                |
 
 ***
 
 ### Flying-System
-| Name                          | Usage                                                |
-| ---                           | ---                                                  |
-| Raspberry PI Model 0         | Power source, reading Sensors with I2C, SPI, 1-Wire  | 
-| AdaFruit INA260               | Voltage and Current Measurement                      |
+| Name                          | Usage                                                 |
+| ---                           | ---                                                   |
+| Raspberry PI Model 0         | Power source, reading Sensors with I2C, SPI, 1-Wire    | 
+| AdaFruit INA260               | Voltage and Current Measurement                       |
+| NEO6M                         | GPS sensor with UART Interface                        |
 ***
