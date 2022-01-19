@@ -2,7 +2,7 @@
 @File:          app.py
 @Descrption:    starts flask server for Strato Flight 2021/2022
 @Author:        Prossinger Jakob
-@Date:          19 January 2021
+@Date:          19 January 2022
 @Todo:          * auto reload server data if measuring thread is finished
                 * setup function: logging, sensor data, csv file existing
                 * comments Parameters and functions
