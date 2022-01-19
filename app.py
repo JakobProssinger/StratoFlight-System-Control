@@ -130,12 +130,6 @@ def system_main_thread() -> None:
     logger.info("started system main thread")
     threading.Timer(5, system_main_thread).start()
 
-
-# Auto start meassuring thread
-if app.run_main_system == True:
-    system_main_thread()
-
-
 def led_blink_thread() -> None:
     if app.led_blink_state is False:
         return
@@ -207,4 +201,5 @@ def show_values():
 
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=80, debug=True)
+    led_blink_thread()
+    app.run(host=const._IP_PRIMARY, port=5000, debug=True)

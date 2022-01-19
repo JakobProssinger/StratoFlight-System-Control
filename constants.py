@@ -6,6 +6,8 @@
 @Date:          21 December 2021
 @Todo:          * 
 """
+#Server
+_IP_PRIMARY = '10.11.0.1'
 
 #PIN Layout
 _LEDPIN1 = 11
