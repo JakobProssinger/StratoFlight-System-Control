@@ -2,13 +2,14 @@
 
 <head>
     <title>RPi Web Server</title>
+    <link rel="stylesheet" href="main.css">
     <meta http-equiv=”refresh” content="5" />
 </head>
 
 <body>
-    <h1>RPi Web Server lol</h1>
+    <h1>RPi Web Server</h1>
     <a href="/sensors">
-        <input type="button" value="Sensor Data" />
+        <button type="button">Sensor Data</button>
     </a>
 
     {% if main_process == true %}
@@ -16,7 +17,7 @@
     <div>
         <div>
             <a href="/changeProcess/off">
-                <input type="button" value="Turn off" />
+                <button type="button"   >Turn off</button>
             </a>
         </div>
     </div>
@@ -25,7 +26,7 @@
     <div>
         <div>
             <a href="/changeProcess/on">
-                <input type="button" value="Turn on" />
+                <button type="button">Turn on</button>
             </a>
         </div>
     </div>
@@ -36,7 +37,7 @@
     <div>
         <div>
             <a href="/changeBlinkMode/off">
-                <input type="button" value="Turn off" />
+                <button type="button">Turn off</button>
             </a>
         </div>
     </div>
@@ -45,7 +46,7 @@
     <div>
         <div>
             <a href="/changeBlinkMode/on">
-                <input type="button" value="Turn on" />
+                <button type="button">Turn on</button>
             </a>
         </div>
     </div>
