@@ -1,28 +1,33 @@
 <!DOCTYPE html>
 
 <head>
-    <title>RPi Web Server</title>
+    <title>Primary control center</title>
     <link rel="stylesheet" href="main.css">
+    <link rel="icon" href="icon.png">
     <meta http-equiv=”refresh” content="5" />
+    <meta charset="UTF-8">
+    <meta name="author" content="Jakob * (Prossinger + Mierl)">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 
 <body>
-    <h1>RPi Web Server</h1>
+    <h1>Control center</h1>
+    <h2>Show the collected data</h2>
     <a href="/sensors">
         <button type="button">Sensor Data</button>
     </a>
 
     {% if main_process == true %}
-    <h2>Main Process is currently <strong>on</strong></h2>
+    <h2>Logging is currently <FONT COLOR = GREEN><strong>on</strong></FONT></h2>
     <div>
         <div>
             <a href="/changeProcess/off">
-                <button type="button"   >Turn off</button>
+                <button type="button">Turn off</button>
             </a>
         </div>
     </div>
     {% else %}
-    <h2>Main Process is currently <strong>off</strong></h2>
+    <h2>Logging is currently <FONT COLOR = RED><strong>off</strong></FONT></h2>
     <div>
         <div>
             <a href="/changeProcess/on">
@@ -33,7 +38,7 @@
     {% endif %}
 
     {% if led_blink_mode == true %}
-    <h2>LED Blink Mode is currently <strong>on</strong></h2>
+    <h2>LED Blink Mode is currently <FONT COLOR = GREEN><strong>on</strong></FONT></h2>
     <div>
         <div>
             <a href="/changeBlinkMode/off">
@@ -42,7 +47,7 @@
         </div>
     </div>
     {% else %}
-    <h2>LED Blink Mode is currently <strong>off</strong></h2>
+    <h2>LED Blink Mode is currently <FONT COLOR = RED><strong>off</strong></FONT></h2>
     <div>
         <div>
             <a href="/changeBlinkMode/on">
@@ -52,7 +57,5 @@
     </div>
     {% endif %}
 
-
 </body>
-
 </html>
