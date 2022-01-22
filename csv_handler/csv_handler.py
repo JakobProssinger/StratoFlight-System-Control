@@ -14,27 +14,27 @@ import logging
 
 
 class CSV_HANDLER:
-    def __init__(self, csv_handler_directory: str) -> None:
-        self.directory = csv_handler_directory
+    def __init__(self, path: str) -> None:
+        self.path = csv_handler_path
 
     def csv_write_data_row(self, data_list: list) -> None:
         try:
-            with open(self.directory, 'a', newline='') as csvfile:
+            with open(self.path, 'a', newline='') as csvfile:
                 writer = csv.writer(csvfile, delimiter=';')
                 writer.writerow(data_list)
         except Exception as e:
             csv_module_logger.error(e)
 
-    def csv_write_data_cell(self, data_cell: float) -> None:
+    def csv_write_data_cell(self, data_cell: str) -> None:
         try:
-            with open(self.directory, 'a', newline='') as csvfile:
+            with open(self.path, 'a', newline='') as csvfile:
                 csvfile.write(str(data_cell) + ';')
         except Exception as e:
             csv_module_logger.error(e)
 
     def csv_write_newline(self) -> None:
         try:
-            with open(self.directory, 'a', newline='') as csvfile:
+            with open(self.path, 'a', newline='') as csvfile:
                 csvfile.write('\r')
         except Exception as e:
             csv_module_logger.error(e)
