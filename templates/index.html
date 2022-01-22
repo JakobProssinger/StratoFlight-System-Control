@@ -1,14 +1,10 @@
-<!DOCTYPE html>
+{% extends "layout.html" %}
+{% block content %}
 
-<head>
-    <title>RPi Web Server</title>
-    <meta http-equiv=”refresh” content="5" />
-</head>
-
-<body>
-    <h1>RPi Web Server</h1>
+<div>
+    <h2>Sensor Data</h2>
     <a href="/sensors">
-        <input type="button" value="Sensor Data" />
+        <input type="button" value="Data" />
     </a>
 
     {% if main_process == true %}
@@ -52,6 +48,6 @@
     {% endif %}
 
 
-</body>
+</div>
 
-</html>
+{% endblock %}

@@ -1,0 +1,10 @@
+flask
+threading
+logging
+RPi.GPIO
+atexit
+smbus
+os
+csv
+pynmea2
+serial

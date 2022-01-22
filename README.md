@@ -9,6 +9,8 @@
 ```
 git clone https://github.com/JakobProssinger/StratoFlight-System-Control.git
 ```
+### install python packets
+    
 ### Activate I2C, SPI, RX-TX, 1-Wire
 See guide in at https://pinout.xyz/
 
