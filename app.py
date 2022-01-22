@@ -34,11 +34,10 @@ if __name__ == "__main__":
     sensor_neo = neo6m.NEO6M(name="NEO6M GPS")
 
     strato_csv_handler = CSV_HANDLER("data/sensor_data.csv")
-    strato_csv_handler.csv_write_data_cell(0.1)
-
     strato_controller = sensor.Controller(
         "strato_controller", strato_csv_handler)
     strato_controller.addSensor(sensor_ina1)
     strato_controller.addSensor(sensor_ina2)
     strato_controller.addSensor(sensor_neo)
+    strato_controller.write_csv_header()
     app.run(host="0.0.0.0", port=5000, debug=False)
