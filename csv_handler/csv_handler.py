@@ -15,7 +15,7 @@ import logging
 
 class CSV_HANDLER:
     def __init__(self, path: str) -> None:
-        self.path = csv_handler_path
+        self.path = path
 
     def csv_write_data_row(self, data_list: list) -> None:
         try:
