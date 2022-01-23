@@ -1,3 +1,10 @@
+"""
+@File:          ina260.py
+@Descrption:    module to read INA260 
+@Author:        Prossinger Jakob
+@Date:          23 January 2022
+@Todo:          * implement real sensor data
+"""
 from sensor import sensor
 from sensor.sensor_data import sensor_data
 

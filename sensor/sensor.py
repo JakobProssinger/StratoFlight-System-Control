@@ -1,3 +1,10 @@
+"""
+@File:          sensor.py
+@Descrption:    module to handle multiple sensors reading
+@Author:        Prossinger Jakob
+@Date:          23 January 2022
+@Todo:          * reload all sensors 
+"""
 from csv_handler.csv_handler import CSV_HANDLER
 from os import path
 
@@ -20,7 +27,7 @@ class Controller(object):
         self.sensors: list = []
         self.sensor_names: list = []
         self.csv_handler: CSV_HANDLER = csv_handler
-    
+
     def write_csv_header(self) -> None:
         if path.getsize(self.csv_handler.path) != 0:
             return
