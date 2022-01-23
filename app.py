@@ -12,6 +12,7 @@ from pathlib import Path
 from sensor import ina260
 from sensor import sensor
 from sensor import neo6m
+from sensor import internal
 
 from flask import Flask, request, redirect, render_template
 from csv_handler.csv_handler import CSV_HANDLER
@@ -40,10 +41,12 @@ if __name__ == "__main__":
     sensor_ina1 = ina260.INA260("INA260 Primary", 50)
     sensor_ina2 = ina260.INA260("INA260 Secondary", 50)
     sensor_neo = neo6m.NEO6M(name="NEO6M GPS")
+    sensor_internal = internal.INTERNAL("Raspberry")
 
     strato_csv_handler = CSV_HANDLER("data/sensor_data.csv")
     strato_controller = sensor.Controller(
         "strato_controller", strato_csv_handler)
+    strato_controller.addSensor(sensor_internal)
     strato_controller.addSensor(sensor_ina1)
     strato_controller.addSensor(sensor_ina2)
     strato_controller.addSensor(sensor_neo)
