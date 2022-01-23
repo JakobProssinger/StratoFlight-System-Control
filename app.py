@@ -4,7 +4,6 @@ from sensor import ina260
 from sensor import sensor
 from sensor import neo6m
 
-import flask
 from flask import Flask,  request, redirect, render_template
 from csv_handler.csv_handler import CSV_HANDLER
 
