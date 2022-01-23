@@ -15,14 +15,14 @@ class INTERNAL(sensor.Sensor):
     __DATA_NAMES = ["Raspberry Temperature", "Time"]
     __DATA_UNITS = ["°C", ""]
 
-    def __init__(self, name: str):
+    def __init__(self, name: str) -> None:
         self.name = name
         self.device_address = "none"
         self.data = sensor_data(
             INTERNAL.__DATA_NAMES,
             [0.0, 0.0], INTERNAL.__DATA_UNITS, 2)
 
-    def read_Sensor(self):
+    def read_Sensor(self) -> None:
         self.data.data_value = [
             self.get_raspberry_temperature(), self.get_time()]
 
