@@ -6,6 +6,7 @@
     <h2>{{sensor.name}}</h2>
 
     {% for i in range(sensor.data.data_length) %}
+    <!--TODO change to get_Data-->
     <h3>{{sensor.data.data_name[i]}}:
         {{sensor.data.data_value[i]}}
         {{sensor.data.data_unit[i]}}
