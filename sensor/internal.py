@@ -18,7 +18,7 @@ class INTERNAL(sensor.Sensor):
     def __init__(self, name: str) -> None:
         self.name = name
         self.device_address = "none"
-        self.data = sensor_data(
+        self.data = sensor_data.sensor_data(
             INTERNAL.__DATA_NAMES,
             [0.0, 0.0], INTERNAL.__DATA_UNITS, 2)
 

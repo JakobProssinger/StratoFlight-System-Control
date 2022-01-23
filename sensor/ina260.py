@@ -7,6 +7,7 @@
 """
 from sensor import sensor
 from sensor.sensor_data import sensor_data
+import smbus
 
 _INA260_DEFAULT_DEVICE_ADDRESS = 0x40
 _INA260_CONFIG_ADDR = 0x00
