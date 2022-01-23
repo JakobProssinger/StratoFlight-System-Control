@@ -4,10 +4,11 @@
 @Author:        Prossinger Jakob
 @Date:          23 January 2021
 @Todo:          * implement real sensor readin
+                * implement altitude
 """
 import serial
 import os
-import logging
+import pynmea2
 import sensor
 from sensor import sensor
 from sensor.sensor_data import sensor_data
@@ -27,8 +28,27 @@ class NEO6M(sensor.Sensor):
             NEO6M.__DATA_NAMES,
             [0.0, 0.0, 0.0], NEO6M.__DATA_UNITS, 3)
 
-    def read_Sensor(self):
-        return "NEO6M_DATA"
+    def read_Sensor(self) -> list:
+        try:
+            ser = serial.Serial(self.directory, baudrate=9600, timeout=0.2)
+            for i in range(0, 10):
+                newdata = ser.readline()
+                if str(newdata[0:6]) == "b'$GPRMC'":
+                    newmsg = pynmea2.parse(str(newdata)[2:-5])
+                    lat = newmsg.latitude
+                    lng = newmsg.longitude
+                    gps = " Latitude = " + \
+                        str(lat) + " and Longitude = " + str(lng)
+                    ser.close()
+                    return [lat, lng, 0.0]  # TODO Add longitude
+        except KeyboardInterrupt:
+            ser.close()
+        except Exception as e:
+            ser.close()
+            print(e)
+        finally:
+            ser.close()
+        return ["-", "-", "-"]  # TODO ADD Error code
 
-    def get_Data(self):
+    def get_Data(self) -> sensor_data.sensor_data:
         return self.data
