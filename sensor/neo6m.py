@@ -20,7 +20,7 @@ class NEO6M(sensor.Sensor):
     __DATA_NAMES = ["Longitude", "Latitude", "Altitude"]
     __DATA_UNITS = ["tbd", "tbd", "tbd"]
 
-    def __init__(self, name: str, directory: str = _NEO6M_DEFAULT_Directory):
+    def __init__(self, name: str, directory: str = _NEO6M_DEFAULT_Directory) -> None:
         # self.sensor_type = _SENSOR_TYPE[_NEO6M]
         self.name = name
         self.directory = directory

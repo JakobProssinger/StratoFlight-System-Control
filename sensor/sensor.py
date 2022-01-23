@@ -22,7 +22,7 @@ class Sensor(object):
 
 
 class Controller(object):
-    def __init__(self, name: str, csv_handler: CSV_HANDLER):
+    def __init__(self, name: str, csv_handler: CSV_HANDLER) -> None:
         self.name: str = name
         self.sensors: list = []
         self.sensor_names: list = []

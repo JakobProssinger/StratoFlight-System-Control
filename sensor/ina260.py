@@ -20,7 +20,7 @@ class INA260(sensor.Sensor):
     __DATA_NAMES = ["Voltage", "Current"]
     __DATA_UNITS = ["mV", "mA"]
 
-    def __init__(self, name: str, address: int):
+    def __init__(self, name: str, address: int) -> None:
         self.name = name
         self.sensor_type = sensor._SENSOR_TYPE[sensor._INA260]
         self.i2c = smbus.SMBus(1)  # /dev/i2c-1
@@ -29,10 +29,10 @@ class INA260(sensor.Sensor):
             INA260.__DATA_NAMES,
             [0.0, 0.0], INA260.__DATA_UNITS, 2)
 
-    def read_Sensor(self):
+    def read_Sensor(self) -> None:
         self.data.data_value = [self.get_bus_voltage(), self.get_current()]
 
-    def get_Data(self):
+    def get_Data(self) -> sensor_data.sensor_data:
         return self.data
 
     def twos_compliment_to_int(self, val: int, len: int) -> int:

@@ -26,7 +26,7 @@ class INTERNAL(sensor.Sensor):
         self.data.data_value = [
             self.get_raspberry_temperature(), self.get_time()]
 
-    def get_Data(self):
+    def get_Data(self) -> sensor_data.sensor_data:
         return self.data
 
     def get_raspberry_temperature(self) -> float:
