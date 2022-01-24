@@ -70,15 +70,15 @@ class INA260(sensor.Sensor):
         return True
 
     def get_bus_voltage(self) -> float:
-        raw_read = self.read_ina(self._INA260_BUS_VOLTAGE_ADDR, 2)
+        raw_read = self.read_ina(_INA260_BUS_VOLTAGE_ADDR, 2)
         if type(raw_read[0]) != int:
             return "noVoltage"
         word_rdata = raw_read[0] * 256 + raw_read[1]
-        voltage = round(float(word_rdata) * self._INA260_BUS_VOLTAGE_LSB, 3)
+        voltage = round(float(word_rdata) * _INA260_BUS_VOLTAGE_LSB, 3)
         return voltage
 
     def get_current(self) -> float:
-        raw_read = self.read_ina(self._INA260_CURRENT_ADDR, 2)
+        raw_read = self.read_ina(_INA260_CURRENT_ADDR, 2)
         if type(raw_read[0]) != int:
             return "noCurrent"
         word_rdata = raw_read[0] * 256 + raw_read[1]
@@ -87,17 +87,17 @@ class INA260(sensor.Sensor):
         if (current_sign_bit == 1):
             current = float(
                 self.twos_compliment_to_int(current_twos_compliment,
-                                            16)) * self._INA260_CURRENT_LSB
+                                            16)) * _INA260_CURRENT_LSB
         else:
-            current = float(current_twos_compliment) * self._INA260_CURRENT_LSB
+            current = float(current_twos_compliment) * _INA260_CURRENT_LSB
         return current
 
     def reset_chip(self) -> None:
         byte_list = [0x80, 0x00]  # reset code for INA260
-        self.write_ina(self._INA260_CONFIG_ADDR, byte_list)
+        self.write_ina(_INA260_CONFIG_ADDR, byte_list)
 
     def read_configuration_register(self) -> int:
-        return self.read_ina(self._INA260_CONFIG_ADDR, 2)
+        return self.read_ina(_INA260_CONFIG_ADDR, 2)
 
     def activate_average(self, samples: int) -> None:
         byte_list = [0x61, 0x27]
@@ -112,7 +112,7 @@ class INA260(sensor.Sensor):
             1024: 0x061 + (0b111 << 1)
         }
         byte_list[0] = switch.get(samples, 0x61)
-        if self.write_ina(self._INA260_CONFIG_ADDR, byte_list) is True:
+        if self.write_ina(_INA260_CONFIG_ADDR, byte_list) is True:
             print("actiavted average, Samples : " + str(samples) +
                   " on INA260 with I2C-Address: " +
                   str(hex(self.device_address)))
