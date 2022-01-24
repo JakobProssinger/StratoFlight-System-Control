@@ -7,7 +7,6 @@
 @Todo:          * add logging TODO
                 * add sensor reading thread 
 """
-from pathlib import Path
 from sensor import ina260
 from sensor import sensor
 from sensor import neo6m
@@ -48,6 +47,7 @@ def led_blink_thread() -> None:
 @app.route("/")
 def main() -> None:
     template_data = {
+        'led_blink_mode': app.led_blink_state
     }
     return render_template('index.html', **template_data)
 
@@ -60,6 +60,17 @@ def show_data() -> None:
         'sensors': strato_controller.sensors
     }
     return render_template('sensor_data.html', **template_data)
+
+
+@app.route("/changeBlinkMode/<aMode>")
+def change_Blink_Mode(aMode):
+    if aMode == "on":
+        app.led_blink_state = True
+        led_blink_thread()
+    elif aMode == "off":
+        app.led_blink_state = False
+
+    return redirect("/")
 
 
 if __name__ == "__main__":
