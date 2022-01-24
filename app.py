@@ -3,7 +3,7 @@
 @File:          app.py
 @Descrption:    Systemcontroll of Stratoflight
 @Author:        Prossinger Jakob
-@Date:          23 January 2022
+@Date:          24 January 2022
 @Todo:          * add LED BLink 
                 * add logging TODO
                 * add sensor reading thread 
@@ -31,6 +31,7 @@ def main() -> None:
 @app.route("/sensors")
 def show_data() -> None:
     strato_controller.reload()
+    strato_controller.write_csv_data()
     template_data = {
         'sensors': strato_controller.sensors
     }
