@@ -17,6 +17,15 @@ class CSV_HANDLER:
             with open(path, 'w') as f:
                 f.write('')
 
+    def csv_write_list(self, data_list: list) -> None:
+        try:
+            with open(self.path, 'a', newline='') as csvfile:
+                for data_point in data_list:
+                    csvfile.write(str(data_point) + ';')
+        except OSError:
+            print(OSError)
+        except Exception as e:
+            print(e)
 
     def csv_write_data_row(self, data_list: list) -> None:
         try:
