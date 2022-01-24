@@ -4,8 +4,7 @@
 @Descrption:    Systemcontroll of Stratoflight
 @Author:        Prossinger Jakob
 @Date:          24 January 2022
-@Todo:          * add LED BLink 
-                * add logging TODO
+@Todo:          * add logging TODO
                 * add sensor reading thread 
 """
 from pathlib import Path
