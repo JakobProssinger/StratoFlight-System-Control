@@ -20,6 +20,9 @@ class Sensor(object):
     def write_to_csv() -> None:
         return None
 
+    def read_Sensor() -> list:
+        pass
+
 
 class Controller(object):
     def __init__(self, name: str, csv_handler: CSV_HANDLER) -> None:
@@ -48,4 +51,4 @@ class Controller(object):
 
     def reload(self) -> None:
         for sensor in self.sensors:
-            pass
+            sensor.read_Sensor()
