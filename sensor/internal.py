@@ -2,7 +2,7 @@
 @File:          internal.py
 @Descrption:    a module to hantel internal data from raspberry
 @Author:        Prossinger Jakob
-@Date:          23 January 2022
+@Date:          24 January 2022
 @Todo:          *
 """
 import os
