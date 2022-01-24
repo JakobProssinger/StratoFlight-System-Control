@@ -12,8 +12,8 @@ import datetime
 
 
 class INTERNAL(sensor.Sensor):
-    __DATA_NAMES = ["Raspberry Temperature", "Time"]
-    __DATA_UNITS = ["°C", ""]
+    __DATA_NAMES = ["Time", "Raspberry Temperature"]
+    __DATA_UNITS = ["", "°C"]
 
     def __init__(self, name: str) -> None:
         self.name = name
@@ -23,8 +23,8 @@ class INTERNAL(sensor.Sensor):
             [0.0, 0.0], INTERNAL.__DATA_UNITS, 2)
 
     def read_Sensor(self) -> None:
-        self.data.data_value = [
-            self.get_raspberry_temperature(), self.get_time()]
+        self.data.data_value = [self.get_time(),
+                                self.get_raspberry_temperature()]
 
     def get_Data(self) -> sensor_data.sensor_data:
         return self.data
@@ -38,4 +38,4 @@ class INTERNAL(sensor.Sensor):
         return "noCPUTemperature"
 
     def get_time(self) -> str:
-        return f'{datetime.datetime.now().hour}:{datetime.datetime.now().minute}:{datetime.datetime.now().second}'
+        return datetime.datetime.now()
