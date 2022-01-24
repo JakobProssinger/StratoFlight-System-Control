@@ -5,14 +5,14 @@
 @Author:        Prossinger Jakob
 @Date:          24 January 2022
 @Todo:          * add logging TODO
-                * add sensor reading thread 
+                * find better way to init flask app with settings TODO 
 """
 from sensor import ina260
 from sensor import sensor
 from sensor import neo6m
 from sensor import internal
 from config import *
-from flask import Flask, request, redirect, render_template
+from flask import Flask, redirect, render_template
 from csv_handler.csv_handler import CSV_HANDLER
 import RPi.GPIO as GPIO
 import atexit
