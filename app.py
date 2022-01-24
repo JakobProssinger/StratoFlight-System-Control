@@ -21,6 +21,7 @@ import threading
 
 app = Flask(__name__)
 app.led_blink_state = True
+app.run_main_system = True
 app.LED_states = default_LED_states
 GPIO.setmode(GPIO.BOARD)
 for pin in app.LED_states:
@@ -42,6 +43,14 @@ def led_blink_thread() -> None:
         app.LED_states[pin]['state'] = not app.LED_states[pin]['state']
         GPIO.output(pin, app.LED_states[pin]['state'])
     threading.Timer(1.5, led_blink_thread).start()
+
+
+def sensor_reading_thread() -> None:
+    if app.run_main_system is False:
+        return
+    strato_controller.reload()
+    strato_controller.write_csv_data()
+    threading.Timer(25, sensor_reading_thread).start()
 
 
 @app.route("/")
@@ -89,4 +98,5 @@ if __name__ == "__main__":
     strato_controller.write_csv_header()
 
     led_blink_thread()
+    sensor_reading_thread()
     app.run(host="0.0.0.0", port=5000, debug=True)
