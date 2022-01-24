@@ -30,7 +30,7 @@ def main() -> None:
 
 @app.route("/sensors")
 def show_data() -> None:
-
+    strato_controller.reload()
     template_data = {
         'sensors': strato_controller.sensors
     }
