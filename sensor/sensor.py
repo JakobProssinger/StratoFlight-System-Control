@@ -17,10 +17,7 @@ _SENSOR_TYPE = {_INA260: "INA260",  _DS18B20: "DS18B20", _NEO6M: "NEO6M"}
 class Sensor(object):
     name: str
 
-    def write_to_csv() -> None:
-        return None
-
-    def read_Sensor() -> list:
+    def read_Sensor(self) -> list:
         pass
 
 
@@ -39,6 +36,11 @@ class Controller(object):
                 self.csv_handler.csv_write_data_cell(
                     f'{sensor.name} {sensor.data.data_name[i]} [{sensor.data.data_unit[i]}]'
                 )
+        self.csv_handler.csv_write_newline()
+
+    def write_csv_data(self) -> None:
+        for sensor in self.sensors:
+            self.csv_handler.csv_write_list(sensor.data.data_value)
         self.csv_handler.csv_write_newline()
 
     def addSensor(self, sensor) -> None:
