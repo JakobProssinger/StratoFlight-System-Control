@@ -40,7 +40,9 @@ class NEO6M(sensor.Sensor):
                     gps = " Latitude = " + \
                         str(lat) + " and Longitude = " + str(lng)
                     ser.close()
-                    return [lat, lng, 0.0]  # TODO Add longitude
+                    # TODO Add longitude
+                    self.data.data_value = [lat, lng, 0.0]
+                    return
         except KeyboardInterrupt:
             ser.close()
         except Exception as e:
@@ -48,7 +50,7 @@ class NEO6M(sensor.Sensor):
             print(e)
         finally:
             ser.close()
-        return ["-", "-", "-"]  # TODO ADD Error code
+        self.data.data_value = ["-", "-", "-"]  # TODO ADD Error code
 
     def get_Data(self) -> sensor_data.sensor_data:
         return self.data
