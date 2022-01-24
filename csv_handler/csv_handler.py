@@ -2,7 +2,7 @@
 @File:          csv_handler.py
 @Descrption:    a module to handle csv writing
 @Author:        Prossinger Jakob
-@Date:          23 January 2022
+@Date:          24 January 2022
 @Todo:          * change prints to loggs
 """
 import csv

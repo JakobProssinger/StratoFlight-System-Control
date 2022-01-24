@@ -2,7 +2,7 @@
 @File:          sensor.py
 @Descrption:    module to handle multiple sensors reading
 @Author:        Prossinger Jakob
-@Date:          23 January 2022
+@Date:          24 January 2022
 @Todo:          * reload all sensors 
 """
 from csv_handler.csv_handler import CSV_HANDLER
