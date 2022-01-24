@@ -2,9 +2,8 @@
 @File:          neo6m.py
 @Descrption:    module to read Neo-6M GPS Sensor
 @Author:        Prossinger Jakob
-@Date:          23 January 2021
-@Todo:          * implement real sensor readin
-                * implement altitude
+@Date:          24 January 2021
+@Todo:           * implement altitude
 """
 import serial
 import os
