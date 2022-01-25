@@ -2,8 +2,9 @@
 @File:          neo6m.py
 @Descrption:    module to read Neo-6M GPS Sensor
 @Author:        Prossinger Jakob
-@Date:          24 January 2021
-@Todo:           * implement altitude
+@Date:          25 January 2021
+@Todo:          * implement altitude
+                * define units
 """
 import serial
 import os
@@ -12,15 +13,32 @@ import sensor
 from sensor import sensor
 from sensor.sensor_data import sensor_data
 
-_NEO6M_DEFAULT_Directory = "/dev/ttyAMA0"
-
 
 class NEO6M(sensor.Sensor):
-    __DATA_NAMES = ["Longitude", "Latitude", "Altitude"]
-    __DATA_UNITS = ["tbd", "tbd", "tbd"]
+    """
+    class to handle read of the neo-6m GPS sensor
+    child class of sensor.Sensor
 
-    def __init__(self, name: str, directory: str = _NEO6M_DEFAULT_Directory) -> None:
-        # self.sensor_type = _SENSOR_TYPE[_NEO6M]
+    Attributes:
+        __NEO6M_DEFAULT_Directory (str): default directory to the neo6m data directory
+
+        __DATA_NAMES (list): stores the names for the data points of the neo6m
+
+        __DATA_UNITS (list): stores the units for the data point of the neo6m 
+
+    """
+    __NEO6M_DEFAULT_Directory = "/dev/ttyAMA0"
+    __DATA_NAMES = ["Longitude", "Latitude", "Altitude"]
+    __DATA_UNITS = ["tbd", "tbd", "tbd"]  # TODO define units
+
+    def __init__(self, name: str, directory: str = __NEO6M_DEFAULT_Directory) -> None:
+        """
+        init function of neo6m
+
+        Args:
+            name (str): name of the neo6m sensor
+            directory (str): directory to the neo6m data directory. Defaults to __NEO6M_DEFAULT_Directory.
+        """
         self.name = name
         self.directory = directory
         self.data = sensor_data.sensor_data(
@@ -28,6 +46,12 @@ class NEO6M(sensor.Sensor):
             [0.0, 0.0, 0.0], NEO6M.__DATA_UNITS, 3)
 
     def read_Sensor(self) -> list:
+        """
+        reading longitude latitude and altitude from the neo6m data directory
+
+        Returns:
+            list: return lat. long. and alt. in a list if sensor was found otherwise it will return a list with three - 
+        """
         try:
             ser = serial.Serial(self.directory, baudrate=9600, timeout=0.2)
             for i in range(0, 10):
@@ -39,7 +63,7 @@ class NEO6M(sensor.Sensor):
                     gps = " Latitude = " + \
                         str(lat) + " and Longitude = " + str(lng)
                     ser.close()
-                    # TODO Add longitude
+                    # TODO Add alitude
                     self.data.data_value = [lat, lng, 0.0]
                     return
         except KeyboardInterrupt:
@@ -52,4 +76,10 @@ class NEO6M(sensor.Sensor):
         self.data.data_value = ["-", "-", "-"]  # TODO ADD Error code
 
     def get_Data(self) -> sensor_data.sensor_data:
+        """
+        gets the data fom the neo6m
+
+        Returns:
+            sensor_data.sensor_data: data parameter of the neo6m  
+        """
         return self.data
