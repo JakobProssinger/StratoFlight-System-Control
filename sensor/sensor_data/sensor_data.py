@@ -2,7 +2,7 @@
 @File:          sensor_data.py
 @Descrption:    class to store sensor data
 @Author:        Prossinger Jakob
-@Date:          23 January 2022
+@Date:          25 January 2022
 @Todo:          *
 """
 from dataclasses import dataclass
