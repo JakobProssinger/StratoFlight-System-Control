@@ -4,26 +4,59 @@
 @Descrption:    Systemcontroll of Stratoflight
 @Author:        Prossinger Jakob
 @Date:          24 January 2022
-@Todo:          * add LED BLink 
-                * add logging TODO
-                * add sensor reading thread 
+@Todo:          * add logging TODO
+                * find better way to init flask app with settings TODO 
 """
-from pathlib import Path
 from sensor import ina260
 from sensor import sensor
 from sensor import neo6m
 from sensor import internal
-
-from flask import Flask, request, redirect, render_template
+from config import *
+from flask import Flask, redirect, render_template
 from csv_handler.csv_handler import CSV_HANDLER
+import RPi.GPIO as GPIO
+import atexit
+import threading
 
 
 app = Flask(__name__)
+app.led_blink_state = True
+app.run_main_system = True
+app.LED_states = default_LED_states
+GPIO.setmode(GPIO.BOARD)
+for pin in app.LED_states:
+    GPIO.setup(pin, GPIO.OUT)
+    GPIO.output(pin, app.LED_states[pin]['state'])
+
+
+@atexit.register
+def atexit_function() -> None:
+    print("exited")
+    GPIO.cleanup()
+
+
+def led_blink_thread() -> None:
+    global app
+    if app.led_blink_state is False:
+        return
+    for pin in app.LED_states:
+        app.LED_states[pin]['state'] = not app.LED_states[pin]['state']
+        GPIO.output(pin, app.LED_states[pin]['state'])
+    threading.Timer(1.5, led_blink_thread).start()
+
+
+def sensor_reading_thread() -> None:
+    if app.run_main_system is False:
+        return
+    strato_controller.reload()
+    strato_controller.write_csv_data()
+    threading.Timer(25, sensor_reading_thread).start()
 
 
 @app.route("/")
 def main() -> None:
     template_data = {
+        'led_blink_mode': app.led_blink_state
     }
     return render_template('index.html', **template_data)
 
@@ -36,6 +69,17 @@ def show_data() -> None:
         'sensors': strato_controller.sensors
     }
     return render_template('sensor_data.html', **template_data)
+
+
+@app.route("/changeBlinkMode/<aMode>")
+def change_Blink_Mode(aMode):
+    if aMode == "on":
+        app.led_blink_state = True
+        led_blink_thread()
+    elif aMode == "off":
+        app.led_blink_state = False
+
+    return redirect("/")
 
 
 if __name__ == "__main__":
@@ -52,4 +96,7 @@ if __name__ == "__main__":
     strato_controller.addSensor(sensor_ina2)
     strato_controller.addSensor(sensor_neo)
     strato_controller.write_csv_header()
-    app.run(host="0.0.0.0", port=5000, debug=False)
+
+    led_blink_thread()
+    sensor_reading_thread()
+    app.run(host="0.0.0.0", port=5000, debug=True)
