@@ -2,7 +2,7 @@
 @File:          internal.py
 @Descrption:    a module to hantel internal data from raspberry
 @Author:        Prossinger Jakob
-@Date:          24 January 2022
+@Date:          25 January 2022
 @Todo:          *
 """
 import os
@@ -12,10 +12,24 @@ import datetime
 
 
 class INTERNAL(sensor.Sensor):
+    """
+    class to read internal data from the raspberry pi
+
+    Attributes:
+        __DATA_NAMES (list): stores the names for the data points of the internal sensor
+
+        __DATA_UNITS (list): stores the units for the data point of the internal sensor
+    """
     __DATA_NAMES = ["Time", "Raspberry Temperature"]
     __DATA_UNITS = ["", "°C"]
 
     def __init__(self, name: str) -> None:
+        """
+        init function of the INTERNAL class
+
+        Args:
+            name (str): name of the internal sensor
+        """
         self.name = name
         self.device_address = "none"
         self.data = sensor_data.sensor_data(
@@ -23,19 +37,41 @@ class INTERNAL(sensor.Sensor):
             [0.0, 0.0], INTERNAL.__DATA_UNITS, 2)
 
     def read_Sensor(self) -> None:
+        """
+        read data from the raspberry pi and store it in the self.data object 
+        """
         self.data.data_value = [self.get_time(),
                                 self.get_raspberry_temperature()]
 
     def get_Data(self) -> sensor_data.sensor_data:
+        """
+        read data from the self.data object
+
+        Returns:
+            sensor_data.sensor_data: data of the INTERNAL sensor
+        """
         return self.data
 
     def get_raspberry_temperature(self) -> float:
+        """
+        read the temperature of the raspberry
+
+        Returns:
+            float: temperature of the raspberry if not possible return
+                    string with noCPUTemperature
+        """
         try:
             cpu_temp = os.popen("vcgencmd measure_temp").readline()[:-3]
             return cpu_temp.replace("temp=", "")
         except Exception as e:
-            logger.error("couldnt read CPU Temperature")
+            print("couldn't read CPU Temperature")
         return "noCPUTemperature"
 
     def get_time(self) -> str:
+        """
+        return time from the raspberry pi
+
+        Returns:
+            str: datetime of the raspberry
+        """
         return datetime.datetime.now()
