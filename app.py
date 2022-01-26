@@ -99,4 +99,4 @@ if __name__ == "__main__":
 
     led_blink_thread()
     sensor_reading_thread()
-    app.run(host="0.0.0.0", port=5000, debug=True)
+    app.run(host="172.16.172.138", port=5000, debug=True)
