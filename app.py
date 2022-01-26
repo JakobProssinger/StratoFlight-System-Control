@@ -88,7 +88,7 @@ if __name__ == "__main__":
     sensor_neo = neo6m.NEO6M(name="NEO6M GPS")
     sensor_internal = internal.INTERNAL("Raspberry")
 
-    strato_csv_handler = CSV_HANDLER("/home/pi/Documents/StratoFlight-System-Control-main/data/sensor_data.csv")
+    strato_csv_handler = CSV_HANDLER("/home/pi/Documents/StratoFlight-System-Control/data/sensor_data.csv")
     strato_controller = sensor.Controller(
         "strato_controller", strato_csv_handler)
     strato_controller.addSensor(sensor_internal)
