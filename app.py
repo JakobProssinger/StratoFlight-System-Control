@@ -71,17 +71,6 @@ def show_data() -> None:
     return render_template('sensor_data.html', **template_data)
 
 
-@app.route("/changeBlinkMode/<aMode>")
-def change_Blink_Mode(aMode):
-    if aMode == "on":
-        app.led_blink_state = True
-        led_blink_thread()
-    elif aMode == "off":
-        app.led_blink_state = False
-
-    return redirect("/")
-
-
 if __name__ == "__main__":
     sensor_ina1 = ina260.INA260("INA260 Primary", 0x40)
     sensor_ina2 = ina260.INA260("INA260 Secondary", 0x41)

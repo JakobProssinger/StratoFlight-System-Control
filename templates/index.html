@@ -6,27 +6,15 @@
     <a href="/sensors">
         <button type="button">Data</button>
     </a>
-
-    {% if led_blink_mode == true %}
-    <h2>LED Blink Mode is currently <FONT COLOR = GREEN><strong>on</strong></FONT></h2>
     <div>
-        <div>
-            <a href="/changeBlinkMode/off">
-                <button type="button">Turn off</button>
-            </a>
-        </div>
+        {% if led_blink_mode == true %}
+        <h2>LED Blink Mode is currently <FONT COLOR=GREEN><strong>on</strong></FONT>
+        </h2>
+        {% else %}
+        <h2>LED Blink Mode is currently <FONT COLOR=RED><strong>off</strong></FONT>
+        </h2>
+        {% endif %}
     </div>
-    {% else %}
-    <h2>LED Blink Mode is currently <FONT COLOR = RED><strong>off</strong></FONT></h2>
-    <div>
-        <div>
-            <a href="/changeBlinkMode/on">
-                <button type="button">Turn on</button>
-            </a>
-        </div>
-    </div>
-    {% endif %}
-
 
 </div>
 
