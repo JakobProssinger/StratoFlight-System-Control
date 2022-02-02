@@ -12,6 +12,7 @@ from sensor import sensor
 from sensor import neo6m
 from sensor import internal
 from config import *
+import config as config
 from flask import Flask, redirect, render_template
 from csv_handler.csv_handler import CSV_HANDLER
 import RPi.GPIO as GPIO
@@ -28,11 +29,21 @@ for pin in app.LED_states:
     GPIO.setup(pin, GPIO.OUT)
     GPIO.output(pin, app.LED_states[pin]['state'])
 
+shutdown_flag = False
+
 
 @atexit.register
 def atexit_function() -> None:
     print("exited")
     GPIO.cleanup()
+
+
+def raspberry_shutdown() -> None:
+    pass
+
+
+def raspbery_request_shutdown() -> None:
+    pass
 
 
 def led_blink_thread() -> None:
@@ -42,7 +53,7 @@ def led_blink_thread() -> None:
     for pin in app.LED_states:
         app.LED_states[pin]['state'] = not app.LED_states[pin]['state']
         GPIO.output(pin, app.LED_states[pin]['state'])
-    threading.Timer(1.5, led_blink_thread).start()
+    threading.Timer(config._BLINK_INTERVAL_SEC, led_blink_thread).start()
 
 
 def sensor_reading_thread() -> None:
@@ -50,7 +61,9 @@ def sensor_reading_thread() -> None:
         return
     strato_controller.reload()
     strato_controller.write_csv_data()
-    threading.Timer(25, sensor_reading_thread).start()
+    # if strato_controller.
+    threading.Timer(config._MEASURING_INTERVAL_SEC,
+                    sensor_reading_thread).start()
 
 
 @app.route("/")
@@ -72,8 +85,8 @@ def show_data() -> None:
 
 
 if __name__ == "__main__":
-    sensor_ina1 = ina260.INA260("INA260 Primary", 0x40)
-    sensor_ina2 = ina260.INA260("INA260 Secondary", 0x41)
+    sensor_ina1 = ina260.INA260("INA260 Secondary", 0x40)
+    sensor_ina2 = ina260.INA260("INA260 Primary", 0x41)
     sensor_neo = neo6m.NEO6M(name="NEO6M GPS")
     sensor_internal = internal.INTERNAL("Raspberry")
 
