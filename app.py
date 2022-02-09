@@ -85,7 +85,7 @@ def show_data() -> None:
 
 
 if __name__ == "__main__":
-    sensor_ina1 = ina260.INA260("INA260 Secondary", 0x40)
+    sensor_ina1 = ina260.INA260("INA260 Secondary I", 0x40)
     sensor_ina2 = ina260.INA260("INA260 Primary", 0x41)
     sensor_neo = neo6m.NEO6M(name="NEO6M GPS")
     sensor_internal = internal.INTERNAL("Raspberry")
