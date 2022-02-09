@@ -1,3 +1,10 @@
+"""
+@File:          controller.py
+@Descrption:    controlls sensor and secondary raspberries                
+@Author:        Prossinger Jakob
+@Date:          9 February 2022
+@Todo:          * add Raspberry secondary 
+"""
 from sensor.sensor import Sensor
 from csv_handler.csv_handler import CSV_HANDLER
 from os import path
