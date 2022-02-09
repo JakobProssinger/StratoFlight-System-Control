@@ -27,8 +27,8 @@ class INA260(sensor.Sensor):
         __DATA_UNITS (list): stores the units for the data point of the ina260
 
     """
-    __DATA_NAMES = ["Voltage", "Current"]
-    __DATA_UNITS = ["mV", "mA"]
+    __DATA_NAMES = ["Voltage", "Voltage-Average", "Current"]
+    __DATA_UNITS = ["mV", "mV", "mA"]
 
     def __init__(self, name: str, address: int = _INA260_DEFAULT_DEVICE_ADDRESS) -> None:
         """
@@ -44,7 +44,7 @@ class INA260(sensor.Sensor):
         self.device_address = address
         self.data = sensor_data.sensor_data(
             INA260.__DATA_NAMES,
-            [0.0, 0.0], INA260.__DATA_UNITS, 2)
+            [0.0, 0.0], INA260.__DATA_UNITS, 3)
         self.voltage_fifo = []
         self.reset_chip()
 
@@ -52,7 +52,8 @@ class INA260(sensor.Sensor):
         """
         read data of the ina260 and store it in self.data object
         """
-        self.data.data_value = [self.get_bus_voltage(), self.get_current()]
+        self.data.data_value = [self.get_bus_voltage(
+        ), self.get_voltage_average(), self.get_current()]
 
     def get_Data(self) -> sensor_data.sensor_data:
         """
