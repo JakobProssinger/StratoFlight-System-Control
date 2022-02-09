@@ -138,17 +138,12 @@ class INA260(sensor.Sensor):
             self.voltage_fifo.insert(0, "noVoltage")
             if len(self.voltage_fifo) > 5:
                 self.voltage_fifo.pop()
-            print(
-                f'Voltage average of: {self.name} = {self.get_voltage_average()}\n{self.voltage_fifo}')
-
             return "noVoltage"
         word_rdata = raw_read[0] * 256 + raw_read[1]
         voltage = round(float(word_rdata) * _INA260_BUS_VOLTAGE_LSB, 3)
         self.voltage_fifo.insert(0, voltage)
         if len(self.voltage_fifo) > 5:
             self.voltage_fifo.pop()
-        print(
-            f'Voltage average of: {self.name} = {self.get_voltage_average()}\n{self.voltage_fifo}')
         return voltage
 
     def get_voltage_average(self) -> float:
