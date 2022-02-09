@@ -36,4 +36,5 @@ default_LED_states = {
 }
 
 # Sensors
-_INA260_DEVICE_ADDRESSES = [0x40, 0x41]
+_PRIMARY_INA260_ADDRESS = 0x40
+_SECONDARY1_INA260_ADDRESS = 0x41  # jumper on A0
