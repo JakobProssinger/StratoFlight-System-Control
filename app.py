@@ -23,10 +23,18 @@ app = Flask(__name__)
 app.led_blink_state = True
 app.run_main_system = True
 app.LED_states = default_LED_states
+
+# init GPIO pins
 GPIO.setmode(GPIO.BOARD)
 for pin in app.LED_states:
     GPIO.setup(pin, GPIO.OUT)
     GPIO.output(pin, app.LED_states[pin]['state'])
+
+for pin in config._REQUEST_SHUTDOWN_PINS:
+    GPIO.setup(pin, GPIO.OUT)
+
+for pin in config._POWER_OFF_PINS:
+    GPIO.setup(pin, GPIO.OUT)
 
 
 @atexit.register
