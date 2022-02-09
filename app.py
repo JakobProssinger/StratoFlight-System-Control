@@ -11,6 +11,7 @@ from sensor import ina260
 from sensor import sensor
 from sensor import neo6m
 from sensor import internal
+from controller import controller
 from config import *
 import config as config
 from flask import Flask, redirect, render_template
@@ -34,7 +35,6 @@ shutdown_flag = False
 
 @atexit.register
 def atexit_function() -> None:
-    print("exited")
     GPIO.cleanup()
 
 
@@ -92,7 +92,7 @@ if __name__ == "__main__":
 
     strato_csv_handler = CSV_HANDLER(
         "/home/pi/Documents/StratoFlight-System-Control/data/sensor_data.csv")
-    strato_controller = sensor.Controller(
+    strato_controller = controller.Controller(
         "strato_controller", strato_csv_handler)
     strato_controller.addSensor(sensor_internal)
     strato_controller.addSensor(sensor_ina1)
