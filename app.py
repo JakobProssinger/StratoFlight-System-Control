@@ -38,9 +38,6 @@ for pin in config._REQUEST_SHUTDOWN_PINS:
 
 for pin in config._POWER_OFF_PINS:
     GPIO.setup(pin, GPIO.OUT)
-=======
-shutdown_flag = False
->>>>>>> b7884a88198d569b6ccdf5c38a071ee212c888af
 
 
 @atexit.register
