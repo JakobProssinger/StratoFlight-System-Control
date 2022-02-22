@@ -43,10 +43,6 @@ class Controller():
                 )
         self.csv_handler.csv_write_newline()
 
-    def check_shutdown(self, ina_voltage: float) -> None:
-        for secondary in self.secondaries:
-            pass  # TODO
-
     def write_csv_data(self) -> None:
         """
         write all sensor data to the csv-file

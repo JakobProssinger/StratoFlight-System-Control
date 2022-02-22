@@ -66,6 +66,10 @@ def sensor_reading_thread() -> None:
                     sensor_reading_thread).start()
 
 
+def check_shutdown(ina_voltage: float) -> None:
+    pass  # TODO
+
+
 @app.route("/")
 def main() -> None:
     template_data = {
