@@ -47,14 +47,6 @@ def atexit_function() -> None:
     GPIO.cleanup()
 
 
-def raspberry_shutdown() -> None:
-    pass
-
-
-def raspbery_request_shutdown() -> None:
-    pass
-
-
 def led_blink_thread() -> None:
     global app
     if app.led_blink_state is False:
@@ -120,13 +112,26 @@ if __name__ == "__main__":
 
     # init secondaries
     secondary1 = Secondary(
-        "secondary1", config._SECONDARY1_REQUEST_SHUTDOWN_PIN, config._SECONDARY1_POWER_OFF_PIN)
+        "secondary1", config._SECONDARY1_REQUEST_SHUTDOWN_PIN,
+        config._SECONDARY1_POWER_OFF_PIN,
+        config._SECONDARY1_SHUTDOWN_VOLTAGE,
+        config._SECONDARY1_POWER_ON_VOLTAGE)
+
     secondary2 = Secondary(
-        "secondary2", config._SECONDARY2_REQUEST_SHUTDOWN_PIN, config._SECONDARY2_POWER_OFF_PIN)
+        "secondary2", config._SECONDARY2_REQUEST_SHUTDOWN_PIN,
+        config._SECONDARY2_POWER_OFF_PIN,
+        config._SECONDARY2_SHUTDOWN_VOLTAGE,
+        config._SECONDARY2_POWER_ON_VOLTAGE)
     secondary3 = Secondary(
-        "secondary3", config._SECONDARY3_REQUEST_SHUTDOWN_PIN, config._SECONDARY3_POWER_OFF_PIN)
+        "secondary3", config._SECONDARY3_REQUEST_SHUTDOWN_PIN,
+        config._SECONDARY3_POWER_OFF_PIN,
+        config._SECONDARY3_SHUTDOWN_VOLTAGE,
+        config._SECONDARY3_POWER_ON_VOLTAGE)
     secondary4 = Secondary(
-        "secondary4", config._SECONDARY4_REQUEST_SHUTDOWN_PIN, config._SECONDARY4_POWER_OFF_PIN)
+        "secondary4", config._SECONDARY4_REQUEST_SHUTDOWN_PIN,
+        config._SECONDARY4_POWER_OFF_PIN,
+        config._SECONDARY4_SHUTDOWN_VOLTAGE,
+        config._SECONDARY4_POWER_ON_VOLTAGE)
 
     # add secondaries to controller
     strato_controller.add_Secondary(secondary1)

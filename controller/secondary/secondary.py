@@ -16,12 +16,14 @@ class Secondary():
     _NOT_SHUTDOWN = GPIO.HIGH
 
     def __init__(self, raspberry_name: str, request_pin: int,
-                 power_off_pin: int):
+                 power_off_pin: int, shutdown_voltage: float, power_on_voltage: float):
         self.name: str = raspberry_name
         self.request_pin: int = request_pin
         self.power_off_pin: int = power_off_pin
         self._request_status: bool = Secondary._NOT_SHUTDOWN_REQUEST
         self._power_off_status: bool = Secondary._NOT_SHUTDOWN
+        self.shutdown_voltage: float = shutdown_voltage
+        self.power_on_voltage: float = power_on_voltage
 
     def get_Name(self) -> str:
         return self.name
