@@ -3,9 +3,10 @@
 @File:          app.py
 @Descrption:    Systemcontroll of Stratoflight
 @Author:        Prossinger Jakob
-@Date:          24 January 2022
+@Date:          22 February 2022
 @Todo:          * add logging TODO
                 * find better way to init flask app with settings TODO 
+                * Shutdown Raspberrs PIs
 """
 from sensor import ina260
 from sensor import sensor
@@ -32,15 +33,11 @@ for pin in app.LED_states:
     GPIO.setup(pin, GPIO.OUT)
     GPIO.output(pin, app.LED_states[pin]['state'])
 
-<<<<<<< HEAD
 for pin in config._REQUEST_SHUTDOWN_PINS:
     GPIO.setup(pin, GPIO.OUT)
 
 for pin in config._POWER_OFF_PINS:
     GPIO.setup(pin, GPIO.OUT)
-=======
-shutdown_flag = False
->>>>>>> b7884a88198d569b6ccdf5c38a071ee212c888af
 
 
 @atexit.register
@@ -71,7 +68,6 @@ def sensor_reading_thread() -> None:
         return
     strato_controller.reload()
     strato_controller.write_csv_data()
-    # if strato_controller.
     threading.Timer(config._MEASURING_INTERVAL_SEC,
                     sensor_reading_thread).start()
 
@@ -86,7 +82,9 @@ def main() -> None:
 
 @app.route("/sensors")
 def show_data() -> None:
+    # read new data from all sensors
     strato_controller.reload()
+    # store data in csv file
     strato_controller.write_csv_data()
     template_data = {
         'sensors': strato_controller.sensors
