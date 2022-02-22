@@ -2,7 +2,7 @@
 @File:          config.py
 @Descrption:    configure file for Strato FLight 2021/2022
 @Author:        Prossinger Jakob
-@Date:          24 January 2022
+@Date:          22 February 2022
 @Todo:          *
 """
 import RPi.GPIO as GPIO
@@ -34,8 +34,6 @@ _POWER_OFF_PINS = [_SECONDARY1_POWER_OFF_PIN,
                    _SECONDARY4_POWER_OFF_PIN]
 
 # Configure
-_AUTOSTART_LED_BLINK = True
-_AUTOSTART_MEASURING = True
 _BLINK_INTERVAL_SEC = 1.5
 _MEASURING_INTERVAL_SEC = 20
 
