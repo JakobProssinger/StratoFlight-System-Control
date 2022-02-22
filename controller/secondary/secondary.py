@@ -20,22 +20,22 @@ class Secondary():
         self.name: str = raspberry_name
         self.request_pin: int = request_pin
         self.power_off_pin: int = power_off_pin
-        self.__request_status: bool = Secondary._NOT_SHUTDOWN_REQUEST
-        self.__power_off_status: bool = Secondary._NOT_SHUTDOWN
+        self._request_status: bool = Secondary._NOT_SHUTDOWN_REQUEST
+        self._power_off_status: bool = Secondary._NOT_SHUTDOWN
 
     def get_Name(self) -> str:
         return self.name
 
     def request_shutdown(self) -> None:
         GPIO.output(self.request_pin, Secondary._SHUTDOWN_REQUEST)
-        self.__request_status = Secondary._SHUTDOWN_REQUEST
+        self._request_status = Secondary._SHUTDOWN_REQUEST
 
     def shutdown(self) -> None:
         GPIO.output(self.power_off_pin, Secondary._SHUTDOWN)
-        self.__power_off_status = Secondary._SHUTDOWN
+        self._power_off_status = Secondary._SHUTDOWN
 
     def boot(self) -> None:
         GPIO.output(self.power_off_pin, Secondary._NOT_SHUTDOWN)
-        self.__power_off_status = Secondary._NOT_SHUTDOWN
+        self._power_off_status = Secondary._NOT_SHUTDOWN
         GPIO.output(self.request_pin, Secondary._NOT_SHUTDOWN_REQUEST)
-        self.__request_status = Secondary._NOT_SHUTDOWN_REQUEST
+        self._request_status = Secondary._NOT_SHUTDOWN_REQUEST
