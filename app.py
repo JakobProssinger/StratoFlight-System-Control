@@ -13,6 +13,7 @@ from sensor import sensor
 from sensor import neo6m
 from sensor import internal
 from controller import controller
+from controller.secondary.secondary import Secondary
 from config import *
 import config as config
 from flask import Flask, redirect, render_template
@@ -29,6 +30,7 @@ app.LED_states = default_LED_states
 
 # init GPIO pins
 GPIO.setmode(GPIO.BOARD)
+GPIO.setwarnings(False)
 for pin in app.LED_states:
     GPIO.setup(pin, GPIO.OUT)
     GPIO.output(pin, app.LED_states[pin]['state'])
@@ -93,6 +95,15 @@ def show_data() -> None:
 
 
 if __name__ == "__main__":
+    # init csv handler
+    strato_csv_handler = CSV_HANDLER(
+        "/home/pi/Documents/StratoFlight-System-Control/data/sensor_data.csv")
+
+    # init controller
+    strato_controller = controller.Controller(
+        "strato_controller", strato_csv_handler)
+
+    # init all sensors
     sensor_ina1 = ina260.INA260(
         "INA260 Secondary I", config._SECONDARY1_INA260_ADDRESS)
     sensor_ina2 = ina260.INA260(
@@ -100,16 +111,31 @@ if __name__ == "__main__":
     sensor_neo = neo6m.NEO6M(name="NEO6M GPS")
     sensor_internal = internal.INTERNAL("Raspberry")
 
-    strato_csv_handler = CSV_HANDLER(
-        "/home/pi/Documents/StratoFlight-System-Control/data/sensor_data.csv")
-    strato_controller = controller.Controller(
-        "strato_controller", strato_csv_handler)
+    # add sensors to controller
     strato_controller.addSensor(sensor_internal)
     strato_controller.addSensor(sensor_ina1)
     strato_controller.addSensor(sensor_ina2)
     strato_controller.addSensor(sensor_neo)
     strato_controller.write_csv_header()
 
+    # init secondaries
+    secondary1 = Secondary(
+        "secondary1", config._SECONDARY1_REQUEST_SHUTDOWN_PIN, config._SECONDARY1_POWER_OFF_PIN)
+    secondary2 = Secondary(
+        "secondary2", config._SECONDARY2_REQUEST_SHUTDOWN_PIN, config._SECONDARY2_POWER_OFF_PIN)
+    secondary3 = Secondary(
+        "secondary3", config._SECONDARY3_REQUEST_SHUTDOWN_PIN, config._SECONDARY3_POWER_OFF_PIN)
+    secondary4 = Secondary(
+        "secondary4", config._SECONDARY4_REQUEST_SHUTDOWN_PIN, config._SECONDARY4_POWER_OFF_PIN)
+
+    # add secondaries to controller
+    strato_controller.add_Secondary(secondary1)
+    strato_controller.add_Secondary(secondary2)
+    strato_controller.add_Secondary(secondary3)
+    strato_controller.add_Secondary(secondary4)
+
+    # starting led blink thread
     led_blink_thread()
+    # start sensor reading thread
     sensor_reading_thread()
-    app.run(host="localhost", port=5000, debug=True)
+    app.run(host="localhost", port=5000, debug=False)
