@@ -9,6 +9,7 @@ import RPi.GPIO as GPIO
 
 
 class Secondary():
+    # TODO change to global
     SHUTDOWN_REQUEST = GPIO.HIGH
     NOT_SHUTDOWN_REQUEST = GPIO.LOW
 
