@@ -30,6 +30,9 @@ class Controller():
         self.csv_handler: CSV_HANDLER = csv_handler
         self.secondaries = {}  # dictionary with all secndaries
 
+    def get_Scondaries(self) -> dict:
+        return self.secondaries
+
     def write_csv_header(self) -> None:
         """
         write the header file to the csv-file based on all sensors
