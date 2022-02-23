@@ -1,0 +1,29 @@
+{% extends "layout.html" %}
+{% block content %}
+<div>
+
+    {% for secondary in raspberries.values()%}
+    <h2>{{secondary.get_Name()}}</h2>
+
+    {% if secondary.get_Request_status() == SHUTDOWN_REQUEST%}
+    <h3>Requested as <FONT COLOR=RED><strong></strong>off</strong></FONT>
+    </h3>
+    {% else %}
+    <h3>Requested as <FONT COLOR=GREEN><strong></strong>on</strong></FONT>
+    </h3>
+    {% endif %}
+
+    {% if secondary.get_Power_off_status() == SHUTDOWN%}
+    <h3>is currently turned <FONT COLOR=RED><strong></strong>off</strong></FONT>
+    </h3>
+    {% else %}
+    <h3>is currently turned <FONT COLOR=GREEN><strong></strong>on</strong></FONT>
+    </h3>
+    {% endif %}
+
+    {%endfor%}
+
+
+
+</div>
+{% endblock %}

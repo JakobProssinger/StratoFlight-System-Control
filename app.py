@@ -93,7 +93,7 @@ def check_turn_on(a_controller: controller, ina_voltage: float) -> None:
     if type(ina_voltage) != float:
         print("skiped check turn on because of wrong type")
         return
-    for raspberry in a_controller.secondaries.values():
+    for raspberry in a_controller.get_Scondaries().values():
         if raspberry.get_Power_off_status() == secondary.Secondary.SHUTDOWN:
             if raspberry.get_Power_on_voltage() <= ina_voltage:
                 raspberry.turn_on()
@@ -101,7 +101,7 @@ def check_turn_on(a_controller: controller, ina_voltage: float) -> None:
 
 
 @app.route("/")
-def main() -> None:
+def main():
     template_data = {
         'led_blink_mode': app.led_blink_state
     }
@@ -109,7 +109,7 @@ def main() -> None:
 
 
 @app.route("/sensors")
-def show_data() -> None:
+def show_data():
     # read new data from all sensors
     strato_controller.reload()
     # store data in csv file
@@ -118,6 +118,17 @@ def show_data() -> None:
         'sensors': strato_controller.sensors
     }
     return render_template('sensor_data.html', **template_data)
+
+
+@app.route("/status")
+def show_status():
+    template_data = {
+        'secondary_voltage': ina260_secondary.get_voltage_average(),
+        'raspberries': strato_controller.get_Scondaries(),
+        'SHUTDOWN_REQUEST': secondary.Secondary.SHUTDOWN_REQUEST,
+        'SHUTDOWN': secondary.Secondary.SHUTDOWN,
+    }
+    return render_template('status_window.html', **template_data)
 
 
 if __name__ == "__main__":
