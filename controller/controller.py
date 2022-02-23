@@ -2,8 +2,8 @@
 @File:          controller.py
 @Descrption:    controlls sensor and secondary raspberries                
 @Author:        Prossinger Jakob
-@Date:          9 February 2022
-@Todo:          * add Raspberry secondary 
+@Date:          23 February 2022
+@Todo:          * change sensor and sensor name to dictionary
 """
 from sensor.sensor import Sensor
 from csv_handler.csv_handler import CSV_HANDLER
