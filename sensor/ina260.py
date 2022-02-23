@@ -157,7 +157,7 @@ class INA260(sensor.Sensor):
             sum += value
         if float_len == 0:
             return "noFound"  # TODO ADD ERROR CODE
-        return sum / float_len
+        return round(sum / float_len, 2)
 
     def get_current(self) -> float:
         """

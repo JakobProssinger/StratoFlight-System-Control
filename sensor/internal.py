@@ -2,7 +2,7 @@
 @File:          internal.py
 @Descrption:    a module to hantel internal data from raspberry
 @Author:        Prossinger Jakob
-@Date:          25 January 2022
+@Date:          23 February 2022
 @Todo:          *
 """
 import os
@@ -20,7 +20,7 @@ class INTERNAL(sensor.Sensor):
 
         __DATA_UNITS (list): stores the units for the data point of the internal sensor
     """
-    __DATA_NAMES = ["Time", "Raspberry Temperature"]
+    __DATA_NAMES = ["Date/Time", "Raspberry Temperature"]
     __DATA_UNITS = ["", "°C"]
 
     def __init__(self, name: str) -> None:
@@ -38,7 +38,7 @@ class INTERNAL(sensor.Sensor):
 
     def read_Sensor(self) -> None:
         """
-        read data from the raspberry pi and store it in the self.data object 
+        read data from the raspberry pi and store it in the self.data object
         """
         self.data.data_value = [self.get_time(),
                                 self.get_raspberry_temperature()]
