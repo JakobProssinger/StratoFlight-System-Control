@@ -3,17 +3,16 @@
 @File:          app.py
 @Descrption:    Systemcontroll of Stratoflight
 @Author:        Prossinger Jakob
-@Date:          22 February 2022
+@Date:          23 February 2022
 @Todo:          * add logging TODO
                 * find better way to init flask app with settings TODO 
-                * Shutdown Raspberrs PIs
 """
 from sensor import ina260
 from sensor import sensor
 from sensor import neo6m
 from sensor import internal
 from controller import controller
-from controller.secondary.secondary import Secondary
+from controller.secondary import secondary
 from config import *
 import config as config
 from flask import Flask, redirect, render_template
@@ -62,12 +61,46 @@ def sensor_reading_thread() -> None:
         return
     strato_controller.reload()
     strato_controller.write_csv_data()
+    ina260_secondary_voltage = ina260_secondary.get_voltage_average()
+    # TODO remove
+    print(
+        f'type of ina260_secondary_voltage: {type(ina260_secondary_voltage)}')
+    check_shutdown(strato_controller, ina260_secondary_voltage)
+    check_turn_on(strato_controller, ina260_secondary_voltage)
     threading.Timer(config._MEASURING_INTERVAL_SEC,
                     sensor_reading_thread).start()
 
 
-def check_shutdown(ina_voltage: float) -> None:
-    pass  # TODO
+def check_shutdown(a_controller: controller, ina_voltage: float) -> None:
+    # TODO remove prints
+    if type(ina_voltage) != float:
+        print("skiped check shutdown because of wrong type")
+        return
+    for raspberry in a_controller.secondaries.values():
+        # continue to next raspberry if raspberry is already shutdowned
+        if raspberry.get_Power_off_status() == secondary.Secondary.SHUTDOWN:
+            continue
+        if raspberry.get_Shutdown_voltage() > ina_voltage:
+            # request shutdown if shutdown has not been requested
+            if raspberry.get_Request_status() == secondary.Secondary.NOT_SHUTDOWN_REQUEST:
+                raspberry.request_shutdown()
+                print(f'request shutdown secondary : {raspberry.get_Name()}')
+            # shutdown raspberry
+            else:
+                raspberry.shutdown()
+                print(f'shutdown secondary : {raspberry.get_Name()}')
+
+
+def check_turn_on(a_controller: controller, ina_voltage: float) -> None:
+    # TODO remove prints
+    if type(ina_voltage) != float:
+        print("skiped check turn on because of wrong type")
+        return
+    for raspberry in a_controller.secondaries.values():
+        if raspberry.get_Power_off_status() == secondary.Secondary.SHUTDOWN:
+            if raspberry.get_Power_on_voltage() <= ina_voltage:
+                raspberry.turn_on()
+                print(f'turned on secondary : {raspberry.get_Name()}')
 
 
 @app.route("/")
@@ -100,38 +133,38 @@ if __name__ == "__main__":
         "strato_controller", strato_csv_handler)
 
     # init all sensors
-    sensor_ina1 = ina260.INA260(
+    ina260_secondary = ina260.INA260(
         "INA260 Secondary I", config._SECONDARY1_INA260_ADDRESS)
-    sensor_ina2 = ina260.INA260(
+    ina260_primary = ina260.INA260(
         "INA260 Primary", config._PRIMARY_INA260_ADDRESS)
     sensor_neo = neo6m.NEO6M(name="NEO6M GPS")
     sensor_internal = internal.INTERNAL("Raspberry")
 
     # add sensors to controller
     strato_controller.addSensor(sensor_internal)
-    strato_controller.addSensor(sensor_ina1)
-    strato_controller.addSensor(sensor_ina2)
+    strato_controller.addSensor(ina260_secondary)
+    strato_controller.addSensor(ina260_primary)
     strato_controller.addSensor(sensor_neo)
     strato_controller.write_csv_header()
 
     # init secondaries
-    secondary1 = Secondary(
+    secondary1 = secondary.Secondary(
         "secondary1", config._SECONDARY1_REQUEST_SHUTDOWN_PIN,
         config._SECONDARY1_POWER_OFF_PIN,
         config._SECONDARY1_SHUTDOWN_VOLTAGE,
         config._SECONDARY1_POWER_ON_VOLTAGE)
 
-    secondary2 = Secondary(
+    secondary2 = secondary.Secondary(
         "secondary2", config._SECONDARY2_REQUEST_SHUTDOWN_PIN,
         config._SECONDARY2_POWER_OFF_PIN,
         config._SECONDARY2_SHUTDOWN_VOLTAGE,
         config._SECONDARY2_POWER_ON_VOLTAGE)
-    secondary3 = Secondary(
+    secondary3 = secondary.Secondary(
         "secondary3", config._SECONDARY3_REQUEST_SHUTDOWN_PIN,
         config._SECONDARY3_POWER_OFF_PIN,
         config._SECONDARY3_SHUTDOWN_VOLTAGE,
         config._SECONDARY3_POWER_ON_VOLTAGE)
-    secondary4 = Secondary(
+    secondary4 = secondary.Secondary(
         "secondary4", config._SECONDARY4_REQUEST_SHUTDOWN_PIN,
         config._SECONDARY4_POWER_OFF_PIN,
         config._SECONDARY4_SHUTDOWN_VOLTAGE,
