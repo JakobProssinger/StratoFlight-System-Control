@@ -62,9 +62,6 @@ def sensor_reading_thread() -> None:
     strato_controller.reload()
     strato_controller.write_csv_data()
     ina260_secondary_voltage = ina260_secondary.get_voltage_average()
-    # TODO remove
-    print(
-        f'type of ina260_secondary_voltage: {type(ina260_secondary_voltage)}')
     check_shutdown(strato_controller, ina260_secondary_voltage)
     check_turn_on(strato_controller, ina260_secondary_voltage)
     threading.Timer(config._MEASURING_INTERVAL_SEC,
