@@ -2,9 +2,8 @@
 @File:          neo6m.py
 @Descrption:    module to read Neo-6M GPS Sensor
 @Author:        Prossinger Jakob
-@Date:          23 February 2022
-@Todo:          * implement altitude
-                * define units
+@Date:          28 February 2022
+@Todo:          
 """
 import serial
 import os
@@ -54,7 +53,7 @@ class NEO6M(sensor.Sensor):
         """
         try:
             ser = serial.Serial(self.directory, baudrate=9600, timeout=0.2)
-            for i in range(0, 10):
+            for i in range(0, 15):
                 newdata = ser.readline()
                 if str(newdata[0:6]) == "b'$GPGGA'":
                     newmsg = pynmea2.parse(str(newdata)[2:-5])
