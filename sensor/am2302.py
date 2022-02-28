@@ -25,7 +25,7 @@ class AM2302(sensor.Sensor):
         # TODO convert to °C
         try:
             humidity, temperature = Adafruit_DHT.read_retry(
-                Adafruit_DHT.AM2302, 4)
+                Adafruit_DHT.DHT22, 4)
         except:
             humidity = "notFound"
             temperature = "notFound"

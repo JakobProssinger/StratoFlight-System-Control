@@ -2,7 +2,7 @@
 @File:          neo6m.py
 @Descrption:    module to read Neo-6M GPS Sensor
 @Author:        Prossinger Jakob
-@Date:          25 January 2021
+@Date:          23 February 2022
 @Todo:          * implement altitude
                 * define units
 """
