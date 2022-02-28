@@ -29,7 +29,7 @@ class NEO6M(sensor.Sensor):
     """
     __NEO6M_DEFAULT_Directory = "/dev/ttyAMA0"
     __DATA_NAMES = ["Longitude", "Latitude", "Altitude"]
-    __DATA_UNITS = ["tbd", "tbd", "tbd"]  # TODO define units
+    __DATA_UNITS = ["", "", "meter"]  # [1] [2] empty because they can change
 
     def __init__(self, name: str, directory: str = __NEO6M_DEFAULT_Directory) -> None:
         """
@@ -56,15 +56,13 @@ class NEO6M(sensor.Sensor):
             ser = serial.Serial(self.directory, baudrate=9600, timeout=0.2)
             for i in range(0, 10):
                 newdata = ser.readline()
-                if str(newdata[0:6]) == "b'$GPRMC'":
+                if str(newdata[0:6]) == "b'$GPGGA'":
                     newmsg = pynmea2.parse(str(newdata)[2:-5])
                     lat = newmsg.latitude
                     lng = newmsg.longitude
-                    gps = " Latitude = " + \
-                        str(lat) + " and Longitude = " + str(lng)
+                    alt = newmsg.altitude
                     ser.close()
-                    # TODO Add alitude
-                    self.data.data_value = [lat, lng, 0.0]
+                    self.data.data_value = [f'{lat} {str(newmsg.lat_dir)}', f'{lng} {str(newmsg.lon_dir)}', alt]
                     return
         except KeyboardInterrupt:
             ser.close()

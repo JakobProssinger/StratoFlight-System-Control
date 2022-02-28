@@ -8,3 +8,5 @@ os
 csv
 pynmea2
 serial
+pyserial
+i2c-tools
