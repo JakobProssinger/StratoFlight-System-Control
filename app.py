@@ -11,7 +11,7 @@ from sensor import ina260
 from sensor import sensor
 from sensor import neo6m
 from sensor import internal
-from sensor import am2302
+from sensor import dht22
 from controller import controller
 from controller.secondary import secondary
 from config import *
@@ -148,14 +148,14 @@ if __name__ == "__main__":
         "INA260 Primary", config._PRIMARY_INA260_ADDRESS)
     sensor_neo = neo6m.NEO6M(name="NEO6M GPS")
     sensor_internal = internal.INTERNAL("Raspberry")
-    #dht_shield = am2302.AM2302("DHT")
+    sensor_dht22 = dht22.DHT22("Temperature_Humidity", config._DHT22_PIN)
 
     # add sensors to controller
     strato_controller.addSensor(sensor_internal)
     strato_controller.addSensor(ina260_secondary)
     strato_controller.addSensor(ina260_primary)
     strato_controller.addSensor(sensor_neo)
-    # strato_controller.addSensor(dht_shield)
+    strato_controller.addSensor(sensor_dht22)
     strato_controller.write_csv_header()
 
     # init secondaries

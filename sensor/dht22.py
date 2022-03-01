@@ -36,7 +36,7 @@ class DHT22(sensor.Sensor):
     __DATA_NAMES = ["Temperature", "Humidity"]
     __DATA_UNITS = ["°C", "%"]
 
-    def __init__(self, name: str, pi: pigpio.pi, gpio, power=None) -> None:
+    def __init__(self, name: str, gpio, power=None) -> None:
         """
         Instantiate with the Pi and gpio to which the DHT22 output
         pin is connected.
@@ -84,11 +84,11 @@ class DHT22(sensor.Sensor):
         self.high_tick = 0
         self.bit = 40
 
-        pi.set_pull_up_down(gpio, pigpio.PUD_OFF)
+        self.pi.set_pull_up_down(gpio, pigpio.PUD_OFF)
 
-        pi.set_watchdog(gpio, 0)  # Kill any watchdogs.
+        self.pi.set_watchdog(gpio, 0)  # Kill any watchdogs.
 
-        self.cb = pi.callback(gpio, pigpio.EITHER_EDGE, self._cb)
+        self.cb = self.pi.callback(gpio, pigpio.EITHER_EDGE, self._cb)
 
     def read_Sensor(self) -> None:
         self.trigger()
