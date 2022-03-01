@@ -91,8 +91,12 @@ class DHT22(sensor.Sensor):
         self.cb = pi.callback(gpio, pigpio.EITHER_EDGE, self._cb)
 
     def read_Sensor(self) -> None:
+        self.trigger()
         "read data from the dht22"
         self.data.data_value = [self.get_Temperature(), self.get_Humidity()]
+
+    def get_Data(self) -> None:
+        return self.data
 
     def _cb(self, gpio, level, tick):
         """
