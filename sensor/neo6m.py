@@ -2,7 +2,7 @@
 @File:          neo6m.py
 @Descrption:    module to read Neo-6M GPS Sensor
 @Author:        Prossinger Jakob
-@Date:          28 February 2022
+@Date:          1 March 2022
 @Todo:          
 """
 import serial
@@ -61,7 +61,8 @@ class NEO6M(sensor.Sensor):
                     lng = newmsg.longitude
                     alt = newmsg.altitude
                     ser.close()
-                    self.data.data_value = [f'{lat} {str(newmsg.lat_dir)}', f'{lng} {str(newmsg.lon_dir)}', alt]
+                    self.data.data_value = [
+                        f'{lat} {str(newmsg.lat_dir)}', f'{lng} {str(newmsg.lon_dir)}', alt]
                     return
         except KeyboardInterrupt:
             ser.close()

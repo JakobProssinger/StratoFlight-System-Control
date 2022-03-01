@@ -1,6 +1,11 @@
-#!/usr/bin/env python
-
-# 2014-07-11 DHT22.py
+"""
+@File:          dht.py
+@Descrption:    module to read dht22 temperature and humidity sensor Sensor
+@Author:        Prossinger Jakob
+                original code from pigpio library 
+@Date:          1 March 2022
+@Todo:          
+"""
 
 import time
 import atexit
@@ -14,24 +19,6 @@ class DHT22(sensor.Sensor):
     A class to read relative humidity and temperature from the
     DHT22 sensor.  The sensor is also known as the AM2302.
 
-    The sensor can be powered from the Pi 3V3 or the Pi 5V rail.
-
-    Powering from the 3V3 rail is simpler and safer.  You may need
-    to power from 5V if the sensor is connected via a long cable.
-
-    For 3V3 operation connect pin 1 to 3V3 and pin 4 to ground.
-
-    Connect pin 2 to a gpio.
-
-    For 5V operation connect pin 1 to 5V and pin 4 to ground.
-
-    The following pin 2 connection works for me.  Use at YOUR OWN RISK.
-
-    5V--5K_resistor--+--10K_resistor--Ground
-                     |
-    DHT22 pin 2 -----+
-                     |
-    gpio ------------+
     """
     __DATA_NAMES = ["Temperature", "Humidity"]
     __DATA_UNITS = ["°C", "%"]
