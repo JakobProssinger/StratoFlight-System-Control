@@ -48,14 +48,14 @@ class DHT22(sensor.Sensor):
         Taking readings more often than about once every two seconds will
         eventually cause the DHT22 to hang.  A 3 second interval seems OK.
         """
-
-        self.pi = pigpio.pi()
-        self.gpio = gpio
-        self.power = power
         self.name = name
+        self.sensot_type = sensor._SENSOR_TYPE[sensor._DHT22]
         self.data = sensor_data.sensor_data(
             DHT22.__DATA_NAMES,
             [0, 0, 0.0], DHT22.__DATA_UNITS, 2)
+        self.pi = pigpio.pi()
+        self.gpio = gpio
+        self.power = power
 
         if power is not None:
             pi.write(power, 1)  # Switch sensor on.
@@ -98,7 +98,7 @@ class DHT22(sensor.Sensor):
     def get_Data(self) -> None:
         return self.data
 
-    def _cb(self, gpio, level, tick):
+    def _cb(self, gpio, level, tick) -> None:
         """
         Accumulate the 40 data bits.  Format into 5 bytes, humidity high,
         humidity low, temperature high, temperature low, checksum.
@@ -199,11 +199,11 @@ class DHT22(sensor.Sensor):
             else:                  # Full message received.
                 self.no_response = 0
 
-    def get_Temperature(self):
+    def get_Temperature(self) -> float:
         """Return current temperature."""
         return self.temp
 
-    def get_Humidity(self):
+    def get_Humidity(self) -> float:
         """Return current relative humidity."""
         return self.rhum
 

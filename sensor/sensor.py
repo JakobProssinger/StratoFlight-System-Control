@@ -9,9 +9,9 @@
 _INA260 = 0
 _DS18B20 = 1
 _NEO6M = 2
-_AM2302 = 3
+_DHT22 = 3
 _SENSOR_TYPE = {_INA260: "INA260",  _DS18B20: "DS18B20",
-                _NEO6M: "NEO6M", _AM2302: "AM2302"}
+                _NEO6M: "NEO6M", _DHT22: "AM2302"}
 
 
 class Sensor():
