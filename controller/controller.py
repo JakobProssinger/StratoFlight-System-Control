@@ -2,11 +2,12 @@
 @File:          controller.py
 @Descrption:    controlls sensor and secondary raspberries                
 @Author:        Prossinger Jakob
-@Date:          9 February 2022
-@Todo:          * add Raspberry secondary 
+@Date:          23 February 2022
+@Todo:          * change sensor and sensor name to dictionary
 """
 from sensor.sensor import Sensor
 from csv_handler.csv_handler import CSV_HANDLER
+from controller.secondary.secondary import Secondary
 from os import path
 
 
@@ -27,6 +28,10 @@ class Controller():
         self.sensors: list = []
         self.sensor_names: list = []
         self.csv_handler: CSV_HANDLER = csv_handler
+        self.secondaries = {}  # dictionary with all secndaries
+
+    def get_Scondaries(self) -> dict:
+        return self.secondaries
 
     def write_csv_header(self) -> None:
         """
@@ -48,6 +53,16 @@ class Controller():
         for sensor in self.sensors:
             self.csv_handler.csv_write_list(sensor.data.data_value)
         self.csv_handler.csv_write_newline()
+
+    def add_Secondary(self, secondary: Secondary) -> None:
+        # add new Secondary to dictionary
+        self.secondaries.update({secondary.get_Name(): secondary})
+
+    def secondary_request_shutdown(self, name: str) -> None:
+        self.secondaries[name].request_shutdown()
+
+    def secondary_shutdown(self, name: str) -> None:
+        self.secondaries[name].shutdown()
 
     def addSensor(self, sensor: Sensor) -> None:
         """

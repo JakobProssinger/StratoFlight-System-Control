@@ -2,7 +2,7 @@
 @File:          ina260.py
 @Descrption:    module to read INA260 
 @Author:        Prossinger Jakob
-@Date:          25 January 2022
+@Date:          23 February 2022
 @Todo:          * add logging
 """
 from sensor import sensor
@@ -156,8 +156,8 @@ class INA260(sensor.Sensor):
             float_len += 1
             sum += value
         if float_len == 0:
-            return (-404.0)  # TODO ADD ERROR CODE
-        return round(sum / float_len)
+            return "noFound"  # TODO ADD ERROR CODE
+        return round(sum / float_len, 2)
 
     def get_current(self) -> float:
         """
