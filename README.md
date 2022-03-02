@@ -54,6 +54,7 @@ sudo python3 app.py
 | Raspberry Pi Model 4         | Power source, reading Sensors with I2C, SPI, 1-Wire    | 
 | AdaFruit INA260               | Voltage and Current Measurement                       |
 | NEO6M                         | GPS sensor with UART Interface                        |
+| DHT22                         | Temperature and relative Humidity                     | 
 
 #### Raspberry Pi Used Pinout
 | Pin # | Cable Colour | Name          | Usage                             |
@@ -61,6 +62,7 @@ sudo python3 app.py
 | 02    | RED          | 5V DC-Power   | Power for INA260                  |
 | 03    | BROWN        | SDA1 (I2C)    | SDA for I2C network               |
 | 05    | BLUE         | SCL1 (I2C)    | SCL for I2C network               |
+|07     | VIOLET       | 1-Wire        | reading DHT22                     |
 | 10    | YELLOW       | RX (UART)     | reading from GPS Neo-6M           |
 | 11    | GREEN        | GPIO          | case LED green                    |
 | 13    | WHITE        | GPIO          | case LED red                      |
