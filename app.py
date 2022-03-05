@@ -24,8 +24,6 @@ import threading
 
 
 app = Flask(__name__)
-app.led_blink_state = True
-app.run_main_system = True
 app.LED_states = default_LED_states
 
 # init GPIO pins
@@ -49,8 +47,6 @@ def atexit_function() -> None:
 
 def led_blink_thread() -> None:
     global app
-    if app.led_blink_state is False:
-        return
     for pin in app.LED_states:
         app.LED_states[pin]['state'] = not app.LED_states[pin]['state']
         GPIO.output(pin, app.LED_states[pin]['state'])
@@ -58,8 +54,6 @@ def led_blink_thread() -> None:
 
 
 def sensor_reading_thread() -> None:
-    if app.run_main_system is False:
-        return
     strato_controller.reload()
     strato_controller.write_csv_data()
     ina260_secondary_voltage = ina260_secondary.get_voltage_average()
