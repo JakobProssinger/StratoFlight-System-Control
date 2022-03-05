@@ -3,9 +3,9 @@
 @File:          app.py
 @Descrption:    Systemcontroll of Stratoflight
 @Author:        Prossinger Jakob
-@Date:          23 February 2022
+@Date:          5 March 2022
 @Todo:          * add logging TODO
-                * find better way to init flask app with settings TODO 
+
 """
 from sensor import ina260
 from sensor import sensor
@@ -46,7 +46,6 @@ def atexit_function() -> None:
 
 
 def led_blink_thread() -> None:
-    global app
     for pin in app.LED_states:
         app.LED_states[pin]['state'] = not app.LED_states[pin]['state']
         GPIO.output(pin, app.LED_states[pin]['state'])
@@ -64,9 +63,7 @@ def sensor_reading_thread() -> None:
 
 
 def check_shutdown(a_controller: controller, ina_voltage: float) -> None:
-    # TODO remove prints
     if type(ina_voltage) != float:
-        print("skiped check shutdown because of wrong type")
         return
     for raspberry in a_controller.secondaries.values():
         # continue to next raspberry if raspberry is already shutdowned
@@ -84,9 +81,7 @@ def check_shutdown(a_controller: controller, ina_voltage: float) -> None:
 
 
 def check_turn_on(a_controller: controller, ina_voltage: float) -> None:
-    # TODO remove prints
     if type(ina_voltage) != float:
-        print("skiped check turn on because of wrong type")
         return
     for raspberry in a_controller.get_Scondaries().values():
         if raspberry.get_Power_off_status() == secondary.Secondary.SHUTDOWN:
@@ -97,10 +92,7 @@ def check_turn_on(a_controller: controller, ina_voltage: float) -> None:
 
 @app.route("/")
 def main():
-    template_data = {
-        'led_blink_mode': app.led_blink_state
-    }
-    return render_template('index.html', **template_data)
+    return render_template('index.html')
 
 
 @app.route("/sensors")
@@ -185,4 +177,6 @@ if __name__ == "__main__":
     led_blink_thread()
     # start sensor reading thread
     sensor_reading_thread()
-    app.run(host="localhost", port=5000, debug=False)
+
+    from waitress import serve
+    serve(app, port=5000)
