@@ -7,7 +7,6 @@ smbus
 os
 csv
 pynmea2
-serial
 pyserial
 pigpio
 waitress
