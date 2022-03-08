@@ -2,12 +2,13 @@
 @File:          controller.py
 @Descrption:    controlls sensor and secondary raspberries                
 @Author:        Prossinger Jakob
-@Date:          23 February 2022
+@Date:          8 March 2022
 @Todo:          * change sensor and sensor name to dictionary
 """
 from sensor.sensor import Sensor
 from csv_handler.csv_handler import CSV_HANDLER
 from controller.secondary.secondary import Secondary
+from controller.secondary import secondary
 from os import path
 
 
@@ -41,18 +42,26 @@ class Controller():
             return
         for sensor in self.sensors:
             for i in range(sensor.data.data_length):
-                self.csv_handler.csv_write_data_cell(
+                self.csv_handler.write_data_cell(
                     f'{sensor.name} {sensor.data.data_name[i]} [{sensor.data.data_unit[i]}]'
                 )
-        self.csv_handler.csv_write_newline()
+        for secondary in self.get_Scondaries().values():
+            self.csv_handler.write_data_cell(
+                f'{secondary.get_Name()} Power Status')
+        self.csv_handler.write_newline()
 
     def write_csv_data(self) -> None:
         """
         write all sensor data to the csv-file
         """
         for sensor in self.sensors:
-            self.csv_handler.csv_write_list(sensor.data.data_value)
-        self.csv_handler.csv_write_newline()
+            self.csv_handler.write_list(sensor.data.data_value)
+        for secondary in self.get_Scondaries().values():
+            if secondary.get_Power_status() == secondary.Seconary.SHUTDOWN:
+                self.csv_handler.write_data_cell("off")
+            else: 
+                self.csv_handler.write_data_cell("on")
+        self.csv_handler.write_newline()
 
     def add_Secondary(self, secondary: Secondary) -> None:
         # add new Secondary to dictionary
