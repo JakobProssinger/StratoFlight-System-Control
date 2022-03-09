@@ -59,7 +59,7 @@ class Controller():
         for secondary in self.get_Scondaries().values():
             if secondary.get_Power_status() == Secondary.SHUTDOWN:
                 self.csv_handler.write_data_cell("off")
-            else: 
+            else:
                 self.csv_handler.write_data_cell("on")
         self.csv_handler.write_newline()
 

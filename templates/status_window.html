@@ -13,7 +13,7 @@
     </h3>
     {% endif %}
 
-    {% if secondary.get_Power_off_status() == SHUTDOWN%}
+    {% if secondary.get_Power_status() == SHUTDOWN%}
     <h3>is currently turned <FONT COLOR=RED><strong></strong>off</strong></FONT>
     </h3>
     {% else %}

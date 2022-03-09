@@ -3,7 +3,7 @@
 @File:          app.py
 @Descrption:    Systemcontroll of Stratoflight
 @Author:        Prossinger Jakob
-@Date:          8 March 2022
+@Date:          9 March 2022
 @Todo:          * add logging TODO
 """
 from sensor import ina260
@@ -141,7 +141,6 @@ if __name__ == "__main__":
     strato_controller.addSensor(ina260_primary)
     strato_controller.addSensor(sensor_neo)
     strato_controller.addSensor(sensor_dht22)
-    strato_controller.write_csv_header()
 
     # init secondaries
     secondary1 = secondary.Secondary(
@@ -171,7 +170,7 @@ if __name__ == "__main__":
     strato_controller.add_Secondary(secondary2)
     strato_controller.add_Secondary(secondary3)
     strato_controller.add_Secondary(secondary4)
-
+    strato_controller.write_csv_header()
     # starting led blink thread
     led_blink_thread()
     # start sensor reading thread
