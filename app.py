@@ -15,7 +15,7 @@ from controller import controller
 from controller.secondary import secondary
 from config import *
 import config as config
-from flask import Flask, redirect, render_template
+from flask import Flask, redirect, render_template, send_file
 from csv_handler.csv_handler import CSV_HANDLER
 import RPi.GPIO as GPIO
 import atexit
@@ -115,6 +115,14 @@ def show_status():
         'SHUTDOWN': secondary.Secondary.SHUTDOWN,
     }
     return render_template('status_window.html', **template_data)
+
+
+@app.route("/getCSV")  # this is a job for GET, not POST
+def plot_csv():
+    return send_file('/home/pi/Documents/StratoFlight-System-Control/data/sensor_data.csv',
+                     mimetype='text/csv',
+                     attachment_filename='sensor_data.csv',
+                     as_attachment=True)
 
 
 if __name__ == "__main__":
