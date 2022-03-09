@@ -27,7 +27,7 @@ class CSV_HANDLER:
             with open(path, 'w') as f:
                 f.write('')
 
-    def csv_write_list(self, data_list: list) -> None:
+    def write_list(self, data_list: list) -> None:
         """
         write a list of data to the csv-file with no newline
 
@@ -43,7 +43,7 @@ class CSV_HANDLER:
         except Exception as e:
             print(e)
 
-    def csv_write_data_row(self, data_list: list) -> None:
+    def write_data_row(self, data_list: list) -> None:
         """
         write a list of data to the csv-file with newline
 
@@ -59,7 +59,7 @@ class CSV_HANDLER:
         except Exception as e:
             print(e)
 
-    def csv_write_data_cell(self, data_cell: str) -> None:
+    def write_data_cell(self, data_cell: str) -> None:
         """
         write single element to the csv-file
 
@@ -74,7 +74,7 @@ class CSV_HANDLER:
         except Exception as e:
             print(e)
 
-    def csv_write_newline(self) -> None:
+    def write_newline(self) -> None:
         """
         write a newline symbol to the csv-file
         """

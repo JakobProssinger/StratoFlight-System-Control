@@ -3,9 +3,8 @@
 @File:          app.py
 @Descrption:    Systemcontroll of Stratoflight
 @Author:        Prossinger Jakob
-@Date:          5 March 2022
+@Date:          8 March 2022
 @Todo:          * add logging TODO
-
 """
 from sensor import ina260
 from sensor import sensor
@@ -67,7 +66,7 @@ def check_shutdown(a_controller: controller, ina_voltage: float) -> None:
         return
     for raspberry in a_controller.secondaries.values():
         # continue to next raspberry if raspberry is already shutdowned
-        if raspberry.get_Power_off_status() == secondary.Secondary.SHUTDOWN:
+        if raspberry.get_Power_status() == secondary.Secondary.SHUTDOWN:
             continue
         if raspberry.get_Shutdown_voltage() > ina_voltage:
             # request shutdown if shutdown has not been requested
@@ -84,7 +83,7 @@ def check_turn_on(a_controller: controller, ina_voltage: float) -> None:
     if type(ina_voltage) != float:
         return
     for raspberry in a_controller.get_Scondaries().values():
-        if raspberry.get_Power_off_status() == secondary.Secondary.SHUTDOWN:
+        if raspberry.get_Power_status() == secondary.Secondary.SHUTDOWN:
             if raspberry.get_Power_on_voltage() <= ina_voltage:
                 raspberry.turn_on()
                 print(f'turned on secondary : {raspberry.get_Name()}')
