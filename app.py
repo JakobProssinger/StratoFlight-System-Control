@@ -177,6 +177,4 @@ if __name__ == "__main__":
     led_blink_thread()
     # start sensor reading thread
     sensor_reading_thread()
-
-    from waitress import serve
-    serve(app, port=5000)
+    app.run(port=5000)
