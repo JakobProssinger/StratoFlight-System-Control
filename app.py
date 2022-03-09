@@ -23,8 +23,6 @@ import threading
 
 
 app = Flask(__name__)
-app.led_blink_state = True
-app.run_main_system = True
 app.LED_states = default_LED_states
 
 # init GPIO pins
@@ -47,9 +45,6 @@ def atexit_function() -> None:
 
 
 def led_blink_thread() -> None:
-    global app
-    if app.led_blink_state is False:
-        return
     for pin in app.LED_states:
         app.LED_states[pin]['state'] = not app.LED_states[pin]['state']
         GPIO.output(pin, app.LED_states[pin]['state'])
@@ -57,8 +52,6 @@ def led_blink_thread() -> None:
 
 
 def sensor_reading_thread() -> None:
-    if app.run_main_system is False:
-        return
     strato_controller.reload()
     strato_controller.write_csv_data()
     ina260_secondary_voltage = ina260_secondary.get_voltage_average()
@@ -69,9 +62,7 @@ def sensor_reading_thread() -> None:
 
 
 def check_shutdown(a_controller: controller, ina_voltage: float) -> None:
-    # TODO remove prints
     if type(ina_voltage) != float:
-        print("skiped check shutdown because of wrong type")
         return
     for raspberry in a_controller.secondaries.values():
         # continue to next raspberry if raspberry is already shutdowned
@@ -89,9 +80,7 @@ def check_shutdown(a_controller: controller, ina_voltage: float) -> None:
 
 
 def check_turn_on(a_controller: controller, ina_voltage: float) -> None:
-    # TODO remove prints
     if type(ina_voltage) != float:
-        print("skiped check turn on because of wrong type")
         return
     for raspberry in a_controller.get_Scondaries().values():
         if raspberry.get_Power_status() == secondary.Secondary.SHUTDOWN:
@@ -102,10 +91,7 @@ def check_turn_on(a_controller: controller, ina_voltage: float) -> None:
 
 @app.route("/")
 def main():
-    template_data = {
-        'led_blink_mode': app.led_blink_state
-    }
-    return render_template('index.html', **template_data)
+    return render_template('index.html')
 
 
 @app.route("/sensors")
@@ -190,4 +176,4 @@ if __name__ == "__main__":
     led_blink_thread()
     # start sensor reading thread
     sensor_reading_thread()
-    app.run(host="localhost", port=5000, debug=False)
+    app.run(port=5000)

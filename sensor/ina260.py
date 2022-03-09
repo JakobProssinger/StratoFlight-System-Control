@@ -2,7 +2,7 @@
 @File:          ina260.py
 @Descrption:    module to read INA260 
 @Author:        Prossinger Jakob
-@Date:          23 February 2022
+@Date:          5 March 2022
 @Todo:          * add logging
 """
 from sensor import sensor
@@ -39,7 +39,6 @@ class INA260(sensor.Sensor):
             address (int, optional): address of the INA260. Defaults to _INA260_DEFAULT_DEVICE_ADDRESS.
         """
         self.name = name
-        self.sensor_type = sensor._SENSOR_TYPE[sensor._INA260]
         self.i2c = smbus.SMBus(1)  # /dev/i2c-1
         self.device_address = address
         self.data = sensor_data.sensor_data(

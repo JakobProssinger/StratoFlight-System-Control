@@ -3,7 +3,7 @@
 @Descrption:    module to read dht22 temperature and humidity sensor Sensor
 @Author:        Prossinger Jakob
                 original code from pigpio library 
-@Date:          1 March 2022
+@Date:          5 March 2022
 @Todo:          
 """
 
@@ -36,7 +36,6 @@ class DHT22(sensor.Sensor):
         eventually cause the DHT22 to hang.  A 3 second interval seems OK.
         """
         self.name = name
-        self.sensot_type = sensor._SENSOR_TYPE[sensor._DHT22]
         self.data = sensor_data.sensor_data(
             DHT22.__DATA_NAMES,
             [0, 0, 0.0], DHT22.__DATA_UNITS, 2)
