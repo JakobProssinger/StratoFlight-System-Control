@@ -2,7 +2,7 @@
 @File:          secondary.py
 @Descrption:    
 @Author:        Prossinger Jakob
-@Date:          8 March 2022
+@Date:          9 March 2022
 @Todo:          * 
 """
 import RPi.GPIO as GPIO
@@ -30,7 +30,7 @@ class Secondary():
         return self.name
 
     def get_Power_status(self) -> bool:
-        return self._Power_status
+        return self._power_status
 
     def get_Request_status(self) -> bool:
         return self._request_status

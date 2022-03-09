@@ -2,7 +2,7 @@
 @File:          controller.py
 @Descrption:    controlls sensor and secondary raspberries                
 @Author:        Prossinger Jakob
-@Date:          8 March 2022
+@Date:          9 March 2022
 @Todo:          * change sensor and sensor name to dictionary
 """
 from sensor.sensor import Sensor
@@ -57,7 +57,7 @@ class Controller():
         for sensor in self.sensors:
             self.csv_handler.write_list(sensor.data.data_value)
         for secondary in self.get_Scondaries().values():
-            if secondary.get_Power_status() == secondary.Seconary.SHUTDOWN:
+            if secondary.get_Power_status() == Secondary.SHUTDOWN:
                 self.csv_handler.write_data_cell("off")
             else: 
                 self.csv_handler.write_data_cell("on")
