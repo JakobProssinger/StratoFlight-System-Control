@@ -2,7 +2,7 @@
 @File:          controller.py
 @Descrption:    controlls sensor and secondary raspberries                
 @Author:        Prossinger Jakob
-@Date:          9 March 2022
+@Date:          15 March 2022
 @Todo:          * change sensor and sensor name to dictionary
 """
 from sensor.sensor import Sensor

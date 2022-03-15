@@ -2,13 +2,15 @@
 @File:          internal.py
 @Descrption:    a module to hantel internal data from raspberry
 @Author:        Prossinger Jakob
-@Date:          23 February 2022
+@Date:          15 March 2022
 @Todo:          *
 """
 import os
 from sensor import sensor
 from sensor.sensor_data import sensor_data
 import datetime
+import config
+import RPi.GPIO as GPIO
 
 
 class INTERNAL(sensor.Sensor):
@@ -20,8 +22,8 @@ class INTERNAL(sensor.Sensor):
 
         __DATA_UNITS (list): stores the units for the data point of the internal sensor
     """
-    __DATA_NAMES = ["Date/Time", "Raspberry Temperature"]
-    __DATA_UNITS = ["", "°C"]
+    __DATA_NAMES = ["Date/Time", "Raspberry Temperature", "Start Ramp"]
+    __DATA_UNITS = ["", "°C", ""]
 
     def __init__(self, name: str) -> None:
         """
@@ -34,14 +36,15 @@ class INTERNAL(sensor.Sensor):
         self.device_address = "none"
         self.data = sensor_data.sensor_data(
             INTERNAL.__DATA_NAMES,
-            [0.0, 0.0], INTERNAL.__DATA_UNITS, 2)
+            [0.0, 0.0], INTERNAL.__DATA_UNITS, 3)
 
     def read_Sensor(self) -> None:
         """
         read data from the raspberry pi and store it in the self.data object
         """
         self.data.data_value = [self.get_time(),
-                                self.get_raspberry_temperature()]
+                                self.get_raspberry_temperature(),
+                                self.get_start_ramp()]
 
     def get_Data(self) -> sensor_data.sensor_data:
         """
@@ -75,3 +78,8 @@ class INTERNAL(sensor.Sensor):
             str: datetime of the raspberry
         """
         return datetime.datetime.now()
+
+    def get_start_ramp(self) -> str:
+        if GPIO.input(config._START_RAMP_PIN) is GPIO.HIGH:
+            return "connected"
+        return "not-connected"

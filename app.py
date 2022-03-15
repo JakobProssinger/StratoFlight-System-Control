@@ -30,6 +30,7 @@ def gpio_setup() -> None:
     # init GPIO pins
     GPIO.setmode(GPIO.BOARD)
     GPIO.setwarnings(False)
+    GPIO.setup(config._START_RAMP_PIN, GPIO.IN)
     for pin in app.LED_states:
         GPIO.setup(pin, GPIO.OUT)
         GPIO.output(pin, app.LED_states[pin]['state'])
