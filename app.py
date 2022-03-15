@@ -25,18 +25,20 @@ import threading
 app = Flask(__name__)
 app.LED_states = default_LED_states
 
-# init GPIO pins
-GPIO.setmode(GPIO.BOARD)
-GPIO.setwarnings(False)
-for pin in app.LED_states:
-    GPIO.setup(pin, GPIO.OUT)
-    GPIO.output(pin, app.LED_states[pin]['state'])
 
-for pin in config._REQUEST_SHUTDOWN_PINS:
-    GPIO.setup(pin, GPIO.OUT)
+def gpio_setup() -> None:
+    # init GPIO pins
+    GPIO.setmode(GPIO.BOARD)
+    GPIO.setwarnings(False)
+    for pin in app.LED_states:
+        GPIO.setup(pin, GPIO.OUT)
+        GPIO.output(pin, app.LED_states[pin]['state'])
 
-for pin in config._POWER_OFF_PINS:
-    GPIO.setup(pin, GPIO.OUT)
+    for pin in config._REQUEST_SHUTDOWN_PINS:
+        GPIO.setup(pin, GPIO.OUT)
+
+    for pin in config._POWER_OFF_PINS:
+        GPIO.setup(pin, GPIO.OUT)
 
 
 @atexit.register
@@ -126,6 +128,7 @@ def plot_csv():
 
 
 if __name__ == "__main__":
+    gpio_setup()
     # init csv handler
     strato_csv_handler = CSV_HANDLER(
         "/home/pi/Documents/StratoFlight-System-Control/data/sensor_data.csv")
