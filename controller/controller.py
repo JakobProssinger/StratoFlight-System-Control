@@ -96,3 +96,23 @@ class Controller():
         """
         for sensor in self.sensors:
             sensor.read_Sensor()
+
+    def check_shutdown(self, ina_voltage: float) -> None:
+        if type(ina_voltage) != float:
+            return
+        for raspberry in self.get_Scondaries().values():
+            # continue to next raspberry if raspberry is already shutdowned
+            if raspberry.get_Power_status() == secondary.Secondary.SHUTDOWN:
+                if raspberry.get_Power_on_voltage() <= ina_voltage:
+                    raspberry.turn_on()
+                    print(f'turned on secondary : {raspberry.get_Name()}')
+            elif raspberry.get_Shutdown_voltage() > ina_voltage:
+                # request shutdown if shutdown has not been requested
+                if raspberry.get_Request_status() == secondary.Secondary.NOT_SHUTDOWN_REQUEST:
+                    raspberry.request_shutdown()
+                    print(
+                        f'request shutdown secondary : {raspberry.get_Name()}')
+                # shutdown raspberry
+                else:
+                    raspberry.shutdown()
+                    print(f'shutdown secondary : {raspberry.get_Name()}')

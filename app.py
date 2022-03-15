@@ -3,7 +3,7 @@
 @File:          app.py
 @Descrption:    Systemcontroll of Stratoflight
 @Author:        Prossinger Jakob
-@Date:          9 March 2022
+@Date:          15 March 2022
 @Todo:          * add logging TODO
 """
 from sensor import ina260
@@ -57,38 +57,9 @@ def sensor_reading_thread() -> None:
     strato_controller.reload()
     strato_controller.write_csv_data()
     ina260_secondary_voltage = ina260_secondary.get_voltage_average()
-    check_shutdown(strato_controller, ina260_secondary_voltage)
-    check_turn_on(strato_controller, ina260_secondary_voltage)
+    strato_controller.check_shutdown(ina260_secondary_voltage)
     threading.Timer(config._MEASURING_INTERVAL_SEC,
                     sensor_reading_thread).start()
-
-
-def check_shutdown(a_controller: controller, ina_voltage: float) -> None:
-    if type(ina_voltage) != float:
-        return
-    for raspberry in a_controller.secondaries.values():
-        # continue to next raspberry if raspberry is already shutdowned
-        if raspberry.get_Power_status() == secondary.Secondary.SHUTDOWN:
-            continue
-        if raspberry.get_Shutdown_voltage() > ina_voltage:
-            # request shutdown if shutdown has not been requested
-            if raspberry.get_Request_status() == secondary.Secondary.NOT_SHUTDOWN_REQUEST:
-                raspberry.request_shutdown()
-                print(f'request shutdown secondary : {raspberry.get_Name()}')
-            # shutdown raspberry
-            else:
-                raspberry.shutdown()
-                print(f'shutdown secondary : {raspberry.get_Name()}')
-
-
-def check_turn_on(a_controller: controller, ina_voltage: float) -> None:
-    if type(ina_voltage) != float:
-        return
-    for raspberry in a_controller.get_Scondaries().values():
-        if raspberry.get_Power_status() == secondary.Secondary.SHUTDOWN:
-            if raspberry.get_Power_on_voltage() <= ina_voltage:
-                raspberry.turn_on()
-                print(f'turned on secondary : {raspberry.get_Name()}')
 
 
 @app.route("/")
