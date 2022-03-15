@@ -25,7 +25,7 @@ class Secondary():
         self._power_status: bool = Secondary.NOT_SHUTDOWN
         self.shutdown_voltage: float = shutdown_voltage
         self.power_on_voltage: float = power_on_voltage
-
+        self.turn_on()
     def get_Name(self) -> str:
         return self.name
 
@@ -47,10 +47,10 @@ class Secondary():
 
     def shutdown(self) -> None:
         GPIO.output(self.power_off_pin, Secondary.SHUTDOWN)
-        self._Power_status = Secondary.SHUTDOWN
+        self._power_status = Secondary.SHUTDOWN
 
     def turn_on(self) -> None:
         GPIO.output(self.power_off_pin, Secondary.NOT_SHUTDOWN)
-        self._Power_status = Secondary.NOT_SHUTDOWN
+        self._power_status = Secondary.NOT_SHUTDOWN
         GPIO.output(self.request_pin, Secondary.NOT_SHUTDOWN_REQUEST)
         self._request_status = Secondary.NOT_SHUTDOWN_REQUEST
