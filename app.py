@@ -3,7 +3,7 @@
 @File:          app.py
 @Descrption:    Systemcontroll of Stratoflight
 @Author:        Prossinger Jakob
-@Date:          15 March 2022
+@Date:          16 March 2022
 @Todo:          * add logging TODO
 """
 from sensor import ina260
@@ -20,6 +20,7 @@ from csv_handler.csv_handler import CSV_HANDLER
 import RPi.GPIO as GPIO
 import atexit
 import threading
+from os import system
 
 
 app = Flask(__name__)
@@ -97,6 +98,11 @@ def plot_csv():
                      mimetype='text/csv',
                      attachment_filename='sensor_data.csv',
                      as_attachment=True)
+
+
+@app.route("/reboot")
+def reboot_raspberry() -> None:
+    system('sudo shutdown -r now')
 
 
 if __name__ == "__main__":
