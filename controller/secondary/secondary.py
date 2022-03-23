@@ -30,7 +30,7 @@ class Secondary():
         return self.name
 
     def get_Power_status(self) -> bool:
-        return self._Power_status
+        return self._power_status
 
     def get_Request_status(self) -> bool:
         return self._request_status
@@ -47,10 +47,10 @@ class Secondary():
 
     def shutdown(self) -> None:
         GPIO.output(self.power_off_pin, Secondary.SHUTDOWN)
-        self._Power_status = Secondary.SHUTDOWN
+        self._power_status = Secondary.SHUTDOWN
 
     def turn_on(self) -> None:
         GPIO.output(self.power_off_pin, Secondary.NOT_SHUTDOWN)
-        self._Power_status = Secondary.NOT_SHUTDOWN
+        self._power_status = Secondary.NOT_SHUTDOWN
         GPIO.output(self.request_pin, Secondary.NOT_SHUTDOWN_REQUEST)
         self._request_status = Secondary.NOT_SHUTDOWN_REQUEST

@@ -57,7 +57,7 @@ class Controller():
         for sensor in self.sensors:
             self.csv_handler.write_list(sensor.data.data_value)
         for secondary in self.get_Scondaries().values():
-            if secondary.get_Power_status() == secondary.Seconary.SHUTDOWN:
+            if secondary.get_Power_status() == secondary.Secondary.SHUTDOWN:
                 self.csv_handler.write_data_cell("off")
             else: 
                 self.csv_handler.write_data_cell("on")
