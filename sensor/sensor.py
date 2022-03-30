@@ -5,6 +5,7 @@
 @Date:          5 March 2022
 @Todo:          
 """
+from sensor_data import sensor_data
 
 
 class Sensor():
@@ -13,6 +14,7 @@ class Sensor():
 
     """
     name: str
+    data: sensor_data.sensor_data
 
     def read_Sensor(self) -> list:
         pass

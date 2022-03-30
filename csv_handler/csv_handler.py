@@ -2,7 +2,7 @@
 @File:          csv_handler.py
 @Descrption:    a module to handle csv writing
 @Author:        Prossinger Jakob
-@Date:          25 January 2022
+@Date:          30 March 2022
 @Todo:          * change prints to loggs
 """
 import csv
@@ -18,7 +18,7 @@ class CSV_HANDLER:
     def __init__(self, path: str) -> None:
         """
         init function of the CSV_HANDLER class
-
+        if file does not exist, creates a new file
         Args:
             path (str): path to the csv-file write
         """

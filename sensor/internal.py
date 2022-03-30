@@ -2,7 +2,7 @@
 @File:          internal.py
 @Descrption:    a module to hantel internal data from raspberry
 @Author:        Prossinger Jakob
-@Date:          15 March 2022
+@Date:          30 March 2022
 @Todo:          *
 """
 import os
@@ -33,7 +33,6 @@ class INTERNAL(sensor.Sensor):
             name (str): name of the internal sensor
         """
         self.name = name
-        self.device_address = "none"
         self.data = sensor_data.sensor_data(
             INTERNAL.__DATA_NAMES,
             [0.0, 0.0], INTERNAL.__DATA_UNITS, 3)

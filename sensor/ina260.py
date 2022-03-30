@@ -19,7 +19,7 @@ _INA260_CURRENT_LSB = 1.25  # mA
 
 class INA260(sensor.Sensor):
     """
-    class to reading INA260 sensor
+    class to reading INA260 sensor  
 
     Attributes:
         __DATA_NAMES (list): stores the names for the data points of the ina260
@@ -166,12 +166,13 @@ class INA260(sensor.Sensor):
             float: current of the ina260 in mV. If not found return noCurrent
         """
         raw_read = self.read_ina(_INA260_CURRENT_ADDR, 2)
-        if type(raw_read[0]) != int:
+        if type(raw_read[0]) != int:  # keine Messung gefunden
             return "noCurrent"
+
         word_rdata = raw_read[0] * 256 + raw_read[1]
         current_twos_compliment = word_rdata
         current_sign_bit = current_twos_compliment >> 15
-        if (current_sign_bit == 1):
+        if (current_sign_bit == 1):  # Berechnung bei negativen Strom
             current = float(
                 self.twos_compliment_to_int(current_twos_compliment,
                                             16)) * _INA260_CURRENT_LSB
