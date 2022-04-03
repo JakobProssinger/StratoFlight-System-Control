@@ -5,7 +5,7 @@
 @Date:          5 March 2022
 @Todo:          
 """
-from sensor_data import sensor_data
+from sensor.sensor_data import sensor_data
 
 
 class Sensor():
