@@ -17,7 +17,7 @@ class Controller():
     a controller to handle multiple sensors of the Sensor class
     """
 
-    def __init__(self, name: str, csv_handler: CSV_HANDLER) -> None:
+    def __init__(self, csv_handler: CSV_HANDLER) -> None:
         """
         init function for Controller class 
 
@@ -25,12 +25,11 @@ class Controller():
             name (str): name of the controller
             csv_handler (CSV_HANDLER): csv_handler to store the data of all sensors
         """
-        self.name: str = name
-        self.sensors: list = []
+        self.sensors: list = []  # list contraining all sensor objects
         self.csv_handler: CSV_HANDLER = csv_handler
-        self.secondaries = {}  # dictionary with all secndaries
+        self.secondaries: list = []  # list containing all secondary objects
 
-    def get_Scondaries(self) -> dict:
+    def get_Scondaries(self) -> list:
         return self.secondaries
 
     def write_csv_header(self) -> None:
@@ -45,7 +44,7 @@ class Controller():
                 self.csv_handler.write_data_cell(
                     f'{sensor.name} {sensor.data.data_name[i]} [{sensor.data.data_unit[i]}]'
                 )
-        for secondary in self.get_Scondaries().values():
+        for secondary in self.get_Scondaries():
             self.csv_handler.write_data_cell(
                 f'{secondary.get_Name()} Power Status')
         self.csv_handler.write_newline()
@@ -56,7 +55,7 @@ class Controller():
         """
         for sensor in self.sensors:
             self.csv_handler.write_list(sensor.data.data_value)
-        for secondary in self.get_Scondaries().values():
+        for secondary in self.get_Scondaries():
             if secondary.get_Power_status() == Secondary.SHUTDOWN:
                 self.csv_handler.write_data_cell("off")
             else:
@@ -65,7 +64,7 @@ class Controller():
 
     def add_Secondary(self, secondary: Secondary) -> None:
         # add new Secondary to dictionary
-        self.secondaries.update({secondary.get_Name(): secondary})
+        self.secondaries.append(secondary)
 
     def addSensor(self, sensor: Sensor) -> None:
         """
@@ -85,7 +84,7 @@ class Controller():
 
     def reload(self) -> None:
         """
-        read all sensors data and store in the the sensor.data object
+        read all sensors data and store in the the data object of the sensor
         """
         for sensor in self.sensors:
             sensor.read_Sensor()
@@ -93,7 +92,7 @@ class Controller():
     def check_shutdown(self, ina_voltage: float) -> None:
         if type(ina_voltage) != float:
             return
-        for raspberry in self.get_Scondaries().values():
+        for raspberry in self.get_Scondaries():
             # continue to next raspberry if raspberry is already shutdowned
             if raspberry.get_Power_status() == secondary.Secondary.SHUTDOWN:
                 if raspberry.get_Power_on_voltage() <= ina_voltage:
