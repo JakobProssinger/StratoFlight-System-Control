@@ -2,8 +2,8 @@
 @File:          controller.py
 @Descrption:    controlls sensor and secondary raspberries                
 @Author:        Prossinger Jakob
-@Date:          15 March 2022
-@Todo:          * change sensor and sensor name to dictionary
+@Date:          11 April 2022
+@Todo:          
 """
 from sensor.sensor import Sensor
 from csv_handler.csv_handler import CSV_HANDLER
@@ -27,7 +27,6 @@ class Controller():
         """
         self.name: str = name
         self.sensors: list = []
-        self.sensor_names: list = []
         self.csv_handler: CSV_HANDLER = csv_handler
         self.secondaries = {}  # dictionary with all secndaries
 
@@ -36,9 +35,10 @@ class Controller():
 
     def write_csv_header(self) -> None:
         """
-        write the header file to the csv-file based on all sensors
+        write the header file to the csv-file based on all sensors and secondaries
         """
         if path.getsize(self.csv_handler.path) != 0:
+            #header is already in file
             return
         for sensor in self.sensors:
             for i in range(sensor.data.data_length):
@@ -67,12 +67,6 @@ class Controller():
         # add new Secondary to dictionary
         self.secondaries.update({secondary.get_Name(): secondary})
 
-    def secondary_request_shutdown(self, name: str) -> None:
-        self.secondaries[name].request_shutdown()
-
-    def secondary_shutdown(self, name: str) -> None:
-        self.secondaries[name].shutdown()
-
     def addSensor(self, sensor: Sensor) -> None:
         """
         add a sensor the controller instance
@@ -81,7 +75,6 @@ class Controller():
             sensor (Sensor): sensor to add
         """
         self.sensors.append(sensor)
-        self.sensor_names.append(sensor.name)
 
     def print_data(self) -> None:
         """
