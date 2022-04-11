@@ -3,7 +3,7 @@
 @File:          app.py
 @Descrption:    Systemcontroll of Stratoflight
 @Author:        Prossinger Jakob
-@Date:          16 March 2022
+@Date:          11 April 2022
 @Todo:          * add logging TODO
 """
 from sensor import ina260
@@ -105,6 +105,13 @@ def reboot_raspberry() -> None:
     system('sudo shutdown -r now')
 
 
+@app.route("/clear")
+def clear_csv_file() -> None:
+    strato_controller.csv_handler.clear_file()
+    strato_controller.write_csv_header()
+    return redirect(location="http://127.0.0.1:5000/", code=200)
+
+
 if __name__ == "__main__":
     gpio_setup()
     # init csv handler
@@ -112,8 +119,7 @@ if __name__ == "__main__":
         "/home/pi/Documents/StratoFlight-System-Control/data/sensor_data.csv")
 
     # init controller
-    strato_controller = controller.Controller(
-        "strato_controller", strato_csv_handler)
+    strato_controller = controller.Controller(strato_csv_handler)
 
     # init all sensors
     ina260_secondary = ina260.INA260(
