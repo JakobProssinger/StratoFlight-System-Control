@@ -2,7 +2,7 @@
 @File:          csv_handler.py
 @Descrption:    a module to handle csv writing
 @Author:        Prossinger Jakob
-@Date:          30 March 2022
+@Date:          11 April 2022
 @Todo:          * change prints to loggs
 """
 import csv
@@ -26,6 +26,16 @@ class CSV_HANDLER:
         if os.path.exists(path) is False:
             with open(path, 'w') as f:
                 f.write('')
+
+    def clear_file(self) -> bool:
+        try:
+            with open(self.path, 'a', newline='') as csvfile:
+                csvfile.truncate(0)
+                print("opened file")
+        except OSError:
+            print(OSError)
+        except Exception as e:
+            print(e)
 
     def write_list(self, data_list: list) -> None:
         """
