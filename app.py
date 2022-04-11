@@ -14,14 +14,28 @@ from sensor import dht22
 from controller import controller
 from controller.secondary import secondary
 from config import *
-import config as config
 from flask import Flask, redirect, render_template, send_file
 from csv_handler.csv_handler import CSV_HANDLER
+from os import system
 import RPi.GPIO as GPIO
+import config as config
 import atexit
 import threading
-from os import system
+import logging
 
+logger = logging.getLogger("strato_logger")
+logger.setLevel(logging.DEBUG)
+formatter = logging.Formatter(config.logging_format)
+
+file_logger = logging.FileHandler(logging_file_path)
+file_logger.setLevel(logging.INFO)
+file_logger.setFormatter(formatter)
+logger.addHandler(file_logger)
+
+console_logger = logging.StreamHandler()
+console_logger.setLevel(logging.DEBUG)
+console_logger.setFormatter(formatter)
+logger.addHandler(console_logger)
 
 app = Flask(__name__)
 app.LED_states = default_LED_states
@@ -29,6 +43,7 @@ app.LED_states = default_LED_states
 
 def gpio_setup() -> None:
     # init GPIO pins
+    logger.error("Initiated GPIO Pins")
     GPIO.setmode(GPIO.BOARD)
     GPIO.setwarnings(False)
     GPIO.setup(config._START_RAMP_PIN, GPIO.IN)
@@ -60,6 +75,7 @@ def sensor_reading_thread() -> None:
     strato_controller.write_csv_data()
     ina260_secondary_voltage = ina260_secondary.get_voltage_average()
     strato_controller.check_shutdown(ina260_secondary_voltage)
+    logger.info("Sensors reading function finished")
     threading.Timer(config._MEASURING_INTERVAL_SEC,
                     sensor_reading_thread).start()
 
@@ -167,7 +183,9 @@ if __name__ == "__main__":
     strato_controller.add_Secondary(secondary4)
     strato_controller.write_csv_header()
     # starting led blink thread
+    logger.info("started led blinking")
     led_blink_thread()
     # start sensor reading thread
+    logger.info("started sensor reading thread")
     sensor_reading_thread()
     app.run(port=5000)

@@ -2,7 +2,7 @@
 @File:          config.py
 @Descrption:    configure file for Strato FLight 2021/2022
 @Author:        Prossinger Jakob
-@Date:          22 February 2022
+@Date:          11 April 2022
 @Todo:          *
 """
 import RPi.GPIO as GPIO
@@ -66,3 +66,7 @@ default_LED_states = {
 # Sensors
 _PRIMARY_INA260_ADDRESS = 0x40
 _SECONDARY1_INA260_ADDRESS = 0x41  # jumper on A0
+
+# logging
+logging_format = '%(asctime)s - %(name)-12s - %(levelname)s:\n\tat %(funcName)s() - %(message)s'
+logging_file_path = "/home/pi/Documents/StratoFlight-System-Control/logging/logging.txt"
